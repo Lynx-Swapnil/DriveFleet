@@ -1,13 +1,27 @@
 import BookingCard from '@/components/BookingCard';
 import { AlertDialog, DeleteAlert } from '@/components/DeleteAlert';
 import { EditModal } from '@/components/EditModal';
+import { auth } from '@/lib/auth';
+import { authClient } from '@/lib/auth-client';
 import { Button } from '@heroui/react';
+import { headers } from 'next/headers';
 import Image from 'next/image';
 import React from 'react';
 
 const page = async ({ params }) => {
     const { id } =  await params;
-    const res = await fetch(`http://localhost:5000/cars/${id}`);
+     
+    const {token} = await auth.api.getToken({
+        headers: await headers()
+    })
+     
+    const res = await fetch(`http://localhost:5000/cars/${id}`,
+        {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+        }
+    );
     const car = await res.json();
 
     console.log(car);

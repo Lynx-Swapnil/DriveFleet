@@ -1,4 +1,5 @@
 'use client';
+import { authClient } from '@/lib/auth-client';
 import { FieldError, Input, Label, TextField, Select, ListBox, TextArea, Button } from '@heroui/react';
 import React from 'react';
 
@@ -11,10 +12,14 @@ const page = () => {
 
         console.log(car);
 
+        const { data: tokenData } = await authClient.token();
+               console.log("Token Data:", tokenData);
+       
         const res= await fetch('http://localhost:5000/cars', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                authorization: `Bearer ${tokenData?.token}`
             },
             body: JSON.stringify(car),
         })

@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { Envelope } from "@gravity-ui/icons";
 import { Button, FieldError, Input, Label, Modal, Surface, TextField, Select, ListBox, TextArea } from "@heroui/react";
 
@@ -14,10 +15,16 @@ export function EditModal({ car }) {
 
         console.log(car);
 
+
+         const { data: tokenData } = await authClient.token();
+                console.log("Token Data:", tokenData);
+        
+
         const res= await fetch(`http://localhost:5000/cars/${_id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
+                authorization: `Bearer ${tokenData?.token}`
             },
             body: JSON.stringify(car),
         })

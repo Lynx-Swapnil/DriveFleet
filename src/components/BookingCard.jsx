@@ -14,7 +14,7 @@ const BookingCard = ({ car }) => {
     const [driverNeeded, setDriverNeeded] = useState(false);
     const [specialNote, setSpecialNote] = useState("");
 
-    const handleBooking =  async (e) => {
+    const handleBooking = async (e) => {
         e.preventDefault();
         const bookingData = {
             userId: user?.id,
@@ -33,10 +33,16 @@ const BookingCard = ({ car }) => {
         };
         console.log("Booking Data:", bookingData);
 
+
+        const { data: tokenData } = await authClient.token();
+        console.log("Token Data:", tokenData);
+
+
         const res = await fetch("http://localhost:5000/bookings", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                authorization: `Bearer ${tokenData?.token}`
             },
             body: JSON.stringify(bookingData),
         });
