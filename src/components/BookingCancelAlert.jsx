@@ -21,7 +21,7 @@ export  function BookingCancelAlert({ booking }) {
      <Button variant="outline" className="mt-4">Cancel Booking</Button>
       <AlertDialog.Backdrop>
         <AlertDialog.Container>
-          <AlertDialog.Dialog className="sm:max-w-[400px]">
+          <AlertDialog.Dialog className="sm:max-w-100">
             <AlertDialog.CloseTrigger />
             <AlertDialog.Header>
               <AlertDialog.Icon status="danger" />
