@@ -2,16 +2,25 @@
 
 import { Avatar, Button } from "@heroui/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { motion } from "framer-motion";
 import { FaDoorOpen } from "react-icons/fa6";
 
 const Navbar = () => {
+  const pathname = usePathname();
   const { data: session } = authClient.useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const user = session?.user;
+
+  const isActive = (href) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(href);
+  };
 
   const handleLogout = async () => {
     await authClient.signOut();
@@ -43,11 +52,15 @@ const Navbar = () => {
           DriveFleet
         </Link>
 
-        <ul className="hidden items-center gap-6 md:flex">
+        <ul className="hidden items-center gap-1 md:flex">
           <li>
             <Link
               href="/"
-              className="text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+              className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                isActive("/")
+                  ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20 border-b-2 border-cyan-600 dark:border-cyan-400"
+                  : "text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400"
+              }`}
             >
               Home
             </Link>
@@ -55,7 +68,11 @@ const Navbar = () => {
           <li>
             <Link
               href="/explore-cars"
-              className="text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+              className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                isActive("/explore-cars")
+                  ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20 border-b-2 border-cyan-600 dark:border-cyan-400"
+                  : "text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400"
+              }`}
             >
               Explore Cars
             </Link>
@@ -63,7 +80,11 @@ const Navbar = () => {
           <li>
             <Link
               href="/add-car"
-              className="text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+              className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                isActive("/add-car")
+                  ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20 border-b-2 border-cyan-600 dark:border-cyan-400"
+                  : "text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400"
+              }`}
             >
               Add Car
             </Link>
@@ -71,7 +92,11 @@ const Navbar = () => {
           <li>
             <Link
               href="/my-bookings"
-              className="text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+              className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                isActive("/my-bookings")
+                  ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20 border-b-2 border-cyan-600 dark:border-cyan-400"
+                  : "text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400"
+              }`}
             >
               My Bookings
             </Link>
