@@ -83,6 +83,7 @@ export default function ExploreCarsPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full"
+              aria-label="Search by Car Name"
             />
           </div>
 
@@ -96,6 +97,7 @@ export default function ExploreCarsPage() {
               onChange={(e) => setSelectedType(e.target.value)}
               placeholder="All Types"
               className="w-full"
+              aria-label="Filter by Type"
             >
               <Select.Trigger>
                 <Select.Value />
