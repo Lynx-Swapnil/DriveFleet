@@ -14,15 +14,15 @@ export function EditModal({ car }) {
     const [isOpen, setIsOpen] = useState(false);
     const modalBodyRef = useRef(null);
 
-    if (!car) return null;
-    const { _id, carName, carType, seatCapacity, pickupLocation, imageUrl, dailyRentPrice, description } = car;
-
-    // Scroll to top when modal opens
+    // Scroll to top when modal opens - MUST be before any conditional returns
     useEffect(() => {
         if (isOpen && modalBodyRef.current) {
             modalBodyRef.current.scrollTop = 0;
         }
     }, [isOpen]);
+
+    if (!car) return null;
+    const { _id, carName, carType, seatCapacity, pickupLocation, imageUrl, dailyRentPrice, description } = car;
 
     const onSubmit = async (formData) => {
         setIsPending(true);
