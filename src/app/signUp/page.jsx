@@ -38,7 +38,10 @@ export default function SignUpPage() {
     });
 
     if (data) {
-      toast.success("Registration successful! Please log in.");
+      // Sign out immediately after registration to ensure user is not logged in
+      await authClient.signOut();
+      
+      toast.success("Registration successful! Please log in with your credentials.");
       router.push("/signIn");
       return;
     }
