@@ -9,11 +9,11 @@ export function ThemeProvider({ children }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Get theme from localStorage
+    // Get theme from localStorage, default to light mode
     const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     
-    const shouldBeDark = savedTheme ? savedTheme === "dark" : prefersDark;
+    // Always default to light mode unless explicitly saved as dark
+    const shouldBeDark = savedTheme === "dark";
     setIsDark(shouldBeDark);
     
     if (shouldBeDark) {
