@@ -1,36 +1,50 @@
 'use client';
 import { authClient } from '@/lib/auth-client';
+import { apiFetch } from '@/lib/api';
 import { FieldError, Input, Label, TextField, Select, ListBox, TextArea, Button } from '@heroui/react';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
-const page = () => {
+export default function AddCarPage() {
+    const router = useRouter();
+    const [isPending, setIsPending] = useState(false);
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        setIsPending(true);
         const formData = new FormData(e.currentTarget);
         const car = Object.fromEntries(formData.entries());
 
-        console.log(car);
+        try {
+            const { data: tokenData } = await authClient.token();
+            const res = await apiFetch('/cars', {
+                method: 'POST',
+                headers: {
+                    authorization: `Bearer ${tokenData?.token}`,
+                },
+                body: JSON.stringify(car),
+            });
 
-        const { data: tokenData } = await authClient.token();
-               console.log("Token Data:", tokenData);
-       
-        const res= await fetch('http://localhost:5000/cars', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                authorization: `Bearer ${tokenData?.token}`
-            },
-            body: JSON.stringify(car),
-        })
-        const data = await res.json();
-        console.log(data);
+            if (res.ok) {
+                toast.success('Car added successfully!');
+                router.push('/my-added-cars');
+                router.refresh();
+            } else {
+                const err = await res.json().catch(() => ({}));
+                toast.error(err.message || 'Failed to add car.');
+            }
+        } catch {
+            toast.error('Failed to add car. Please try again.');
+        } finally {
+            setIsPending(false);
+        }
     }
 
-    const isPending = false;
-
     return (
-        <div>
+        <main className="mx-auto max-w-3xl px-6 py-10">
+            <h1 className="text-3xl font-bold text-slate-900">Add Car</h1>
+            <p className="mt-2 mb-6 text-slate-600">List a new vehicle for rent.</p>
             <style>{`
               input[type="number"]::-webkit-outer-spin-button,
               input[type="number"]::-webkit-inner-spin-button {
@@ -200,8 +214,6 @@ const page = () => {
                     {isPending ? "Adding Car..." : "Add Car"}
                 </Button>
             </form>
-        </div>
+        </main>
     );
-};
-
-export default page;
+}

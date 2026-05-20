@@ -1,102 +1,125 @@
 "use client";
-import React, { useState } from "react";
-import { Button, Fieldset, Form, Label, TextArea } from "@heroui/react";
+
 import { authClient } from "@/lib/auth-client";
+import { apiFetch } from "@/lib/api";
+import { Button, Fieldset, Form, Label, TextArea } from "@heroui/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 const BookingCard = ({ car }) => {
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+  const router = useRouter();
+  const [driverNeeded, setDriverNeeded] = useState(false);
+  const [specialNote, setSpecialNote] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { _id, carName, carType, seatCapacity, pickupLocation, imageUrl, dailyRentPrice, description, availabilityStatus } = car;
+  const handleBooking = async (e) => {
+    e.preventDefault();
 
-    const { data: session } = authClient.useSession();
+    if (!user) {
+      toast.error("Please log in to book a car.");
+      router.push("/signIn");
+      return;
+    }
 
-    const user = session?.user;
-    const [driverNeeded, setDriverNeeded] = useState(false);
-    const [specialNote, setSpecialNote] = useState("");
+    if (car.availabilityStatus !== "Available") {
+      toast.error("This car is not available for booking.");
+      return;
+    }
 
-    const handleBooking = async (e) => {
-        e.preventDefault();
-        const bookingData = {
-            userId: user?.id,
-            userName: user?.name,
-            driverNeeded,
-            specialNote,
-            carId: car?._id,
-            carName: car?.carName,
-            carType: car?.carType,
-            seatCapacity: car?.seatCapacity,
-            pickupLocation: car?.pickupLocation,
-            imageUrl: car?.imageUrl,
-            dailyRentPrice: car?.dailyRentPrice,
-            description: car?.description,
-            availabilityStatus: car?.availabilityStatus,
-        };
-        console.log("Booking Data:", bookingData);
+    setIsSubmitting(true);
 
-
-        const { data: tokenData } = await authClient.token();
-        console.log("Token Data:", tokenData);
-
-
-        const res = await fetch("http://localhost:5000/bookings", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                authorization: `Bearer ${tokenData?.token}`
-            },
-            body: JSON.stringify(bookingData),
-        });
-        const data = await res.json();
-
-        toast.success("Car booked successfully!");
-
+    const bookingData = {
+      userId: user.id,
+      userName: user.name,
+      driverNeeded,
+      specialNote,
+      carId: car._id,
+      carName: car.carName,
+      carType: car.carType,
+      seatCapacity: car.seatCapacity,
+      pickupLocation: car.pickupLocation,
+      imageUrl: car.imageUrl,
+      dailyRentPrice: car.dailyRentPrice,
+      description: car.description,
+      availabilityStatus: car.availabilityStatus,
     };
 
-    return (
-        <div className="p-4 bg-white rounded-md shadow-sm w-full max-w-md">
-            <Form onSubmit={handleBooking}>
-                <Fieldset>
-                    <Fieldset.Legend>Book This Car</Fieldset.Legend>
+    try {
+      const { data: tokenData } = await authClient.token();
+      const res = await apiFetch("/bookings", {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${tokenData?.token}`,
+        },
+        body: JSON.stringify(bookingData),
+      });
 
-                    <div className="mb-4">
-                        <Label>Driver Needed</Label>
-                        <div className="flex items-center space-x-4 mt-2">
-                            <label className="flex items-center space-x-2">
-                                <input
-                                    type="radio"
-                                    name="driver"
-                                    checked={!driverNeeded}
-                                    onChange={() => setDriverNeeded(false)}
-                                />
-                                <span>No</span>
-                            </label>
-                            <label className="flex items-center space-x-2">
-                                <input
-                                    type="radio"
-                                    name="driver"
-                                    checked={driverNeeded}
-                                    onChange={() => setDriverNeeded(true)}
-                                />
-                                <span>Yes</span>
-                            </label>
-                        </div>
-                    </div>
+      if (res.ok) {
+        toast.success("Car booked successfully!");
+        router.push("/my-bookings");
+        router.refresh();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        toast.error(err.message || "Booking failed. Please try again.");
+      }
+    } catch {
+      toast.error("Booking failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-                    <div className="mb-4">
-                        <Label>Special Note</Label>
-                        <TextArea
-                            value={specialNote}
-                            onChange={(e) => setSpecialNote(e.target.value)}
-                            placeholder="Add any special instructions (optional)"
-                        />
-                    </div>
+  return (
+    <div className="rounded-md bg-white p-4 shadow-sm w-full">
+      <Form onSubmit={handleBooking}>
+        <Fieldset>
+          <Fieldset.Legend>Book This Car</Fieldset.Legend>
 
-                    <Fieldset.Actions>
-                        <Button type="submit">Book Now</Button>
-                    </Fieldset.Actions>
-                </Fieldset>
-            </Form>
-        </div>
-    );
-}
+          <div className="mb-4">
+            <Label>Driver Needed</Label>
+            <div className="mt-2 flex items-center space-x-4">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="driver"
+                  checked={!driverNeeded}
+                  onChange={() => setDriverNeeded(false)}
+                />
+                <span>No</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="driver"
+                  checked={driverNeeded}
+                  onChange={() => setDriverNeeded(true)}
+                />
+                <span>Yes</span>
+              </label>
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <Label>Special Note</Label>
+            <TextArea
+              value={specialNote}
+              onChange={(e) => setSpecialNote(e.target.value)}
+              placeholder="Add any special instructions (optional)"
+            />
+          </div>
+
+          <Fieldset.Actions>
+            <Button type="submit" isLoading={isSubmitting} className="bg-cyan-500 text-white">
+              Book Now
+            </Button>
+          </Fieldset.Actions>
+        </Fieldset>
+      </Form>
+    </div>
+  );
+};
+
 export default BookingCard;

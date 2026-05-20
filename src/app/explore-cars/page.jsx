@@ -1,24 +1,35 @@
-import CarCard from '@/components/CarCard';
-import React from 'react';
+import CarCard from "@/components/CarCard";
+import { apiFetch } from "@/lib/api";
 
-const page = async () => {
+export default async function ExploreCarsPage() {
+  let cars = [];
+  try {
+    const res = await apiFetch("/cars");
+    if (res.ok) {
+      cars = await res.json();
+    }
+  } catch {
+    cars = [];
+  }
 
-    const res = await fetch('http://localhost:5000/cars');
-    const cars = await res.json();
-    console.log(cars);
+  if (!Array.isArray(cars)) {
+    cars = [];
+  }
 
-    return (
-        <div>
-            <h1>Explore Cars</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                {
-                    cars.map(car => (
-                       <CarCard key={car._id} car={car} />  
-                    ))
-                }
-            </div>
-        </div>
-    );
-};
-
-export default page;
+  return (
+    <main className="mx-auto max-w-7xl px-6 py-10">
+      <h1 className="text-3xl font-bold text-slate-900">Explore Cars</h1>
+      <p className="mt-2 text-slate-600">
+        Browse all vehicles including unavailable listings.
+      </p>
+      <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {cars.map((car) => (
+          <CarCard key={car._id} car={car} />
+        ))}
+      </div>
+      {cars.length === 0 && (
+        <p className="mt-12 text-center text-slate-500">No cars found.</p>
+      )}
+    </main>
+  );
+}

@@ -1,12 +1,22 @@
-'use client';
+"use client";
+
 import { authClient } from "@/lib/auth-client";
 import { Check } from "@gravity-ui/icons";
-import { Button, Description, FieldError, Form, Input, Label, TextField } from "@heroui/react";
-import { redirect } from "next/navigation";
-import React from 'react';
+import {
+  Button,
+  FieldError,
+  Form,
+  Input,
+  Label,
+  TextField,
+} from "@heroui/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
+import toast from "react-hot-toast";
 
-const page = () => {
+export default function SignInPage() {
+  const router = useRouter();
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -17,26 +27,29 @@ const page = () => {
       email: userdata.email,
       password: userdata.password,
     });
-    console.log('data : ', data, 'error : ', error);
 
     if (data) {
-      redirect("/");
+      toast.success("Logged in successfully!");
+      router.push("/");
+      router.refresh();
+      return;
     }
 
     if (error) {
-      alert(error.message);
+      toast.error(error.message || "Login failed. Please try again.");
     }
-  }
+  };
 
   const handleGoogleSignIn = async () => {
-    await authClient.signIn.social({
-        provider: 'google',
-      })
+    await authClient.signIn.social({ provider: "google" });
   };
 
   return (
-    <div>
-      <Form className="flex w-96 flex-col gap-4" onSubmit={onSubmit}>
+    <main className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 py-12">
+      <h1 className="text-3xl font-bold text-slate-900">Login</h1>
+      <p className="mt-2 text-slate-600">Sign in to your DriveFleet account</p>
+
+      <Form className="mt-8 flex w-full flex-col gap-4" onSubmit={onSubmit}>
         <TextField
           isRequired
           name="email"
@@ -52,42 +65,31 @@ const page = () => {
           <Input placeholder="john@example.com" />
           <FieldError />
         </TextField>
-        <TextField
-          isRequired
-          minLength={8}
-          name="password"
-          type="password"
-          validate={(value) => {
-            if (value.length < 8) {
-              return "Password must be at least 8 characters";
-            }
-            if (!/[A-Z]/.test(value)) {
-              return "Password must contain at least one uppercase letter";
-            }
-            if (!/[0-9]/.test(value)) {
-              return "Password must contain at least one number";
-            }
-            return null;
-          }}
-        >
+        <TextField isRequired name="password" type="password">
           <Label>Password</Label>
           <Input placeholder="Enter your password" />
-          <Description>Must be at least 8 characters with 1 uppercase and 1 number</Description>
           <FieldError />
         </TextField>
-        <div className="flex gap-2">
-          <Button type="submit">
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Button type="submit" className="bg-cyan-500 text-white">
             <Check />
-            Submit
+            Login
           </Button>
           <Button type="reset" variant="secondary">
             Reset
           </Button>
-          <Button variant="outline" onClick={handleGoogleSignIn}><FcGoogle /> login with Google</Button>
+          <Button variant="outline" type="button" onClick={handleGoogleSignIn}>
+            <FcGoogle /> Login with Google
+          </Button>
         </div>
       </Form>
-    </div>
-  );
-};
 
-export default page;
+      <p className="mt-6 text-center text-sm text-slate-600">
+        Don&apos;t have an account?{" "}
+        <Link href="/signUp" className="font-medium text-cyan-600 hover:underline">
+          Register here
+        </Link>
+      </p>
+    </main>
+  );
+}

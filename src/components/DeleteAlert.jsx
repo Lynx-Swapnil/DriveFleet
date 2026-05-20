@@ -1,32 +1,40 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import {AlertDialog, Button} from "@heroui/react";
-import { redirect } from "next/navigation";
+import { apiFetch } from "@/lib/api";
+import { AlertDialog, Button } from "@heroui/react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
-export function DeleteAlert({ car }) {
-  const { _id, carName, carType, seatCapacity, pickupLocation, imageUrl, dailyRentPrice, description, availabilityStatus } = car;
+export function DeleteAlert({ car, redirectTo = "/explore-cars" }) {
+  const { _id, carName } = car;
+  const router = useRouter();
 
   const handleDelete = async () => {
+    const { data: tokenData } = await authClient.token();
 
-     const { data: tokenData } = await authClient.token();
-            console.log("Token Data:", tokenData);
-    
-    const res = await fetch(`http://localhost:5000/cars/${_id}`, {
+    const res = await apiFetch(`/cars/${_id}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${tokenData?.token}`
+        authorization: `Bearer ${tokenData?.token}`,
       },
     });
-    const data = await res.json();
-    redirect("/explore-cars");
-    console.log(data);
+
+    if (res.ok) {
+      toast.success("Car deleted successfully.");
+      router.push(redirectTo);
+      router.refresh();
+    } else {
+      const err = await res.json().catch(() => ({}));
+      toast.error(err.message || "Failed to delete car.");
+    }
   };
 
   return (
     <AlertDialog>
-     <Button variant="danger" className="mb-4">Delete</Button>
+      <Button variant="danger" className="mb-4">
+        Delete
+      </Button>
       <AlertDialog.Backdrop>
         <AlertDialog.Container>
           <AlertDialog.Dialog className="sm:max-w-100">
@@ -37,8 +45,8 @@ export function DeleteAlert({ car }) {
             </AlertDialog.Header>
             <AlertDialog.Body>
               <p>
-                This will permanently delete <strong>{carName}</strong> and all of its
-                data. This action cannot be undone.
+                This will permanently delete <strong>{carName}</strong>. This
+                action cannot be undone.
               </p>
             </AlertDialog.Body>
             <AlertDialog.Footer>

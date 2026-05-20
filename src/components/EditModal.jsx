@@ -1,39 +1,48 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
+import { apiFetch } from "@/lib/api";
 import { Envelope } from "@gravity-ui/icons";
 import { Button, FieldError, Input, Label, Modal, Surface, TextField, Select, ListBox, TextArea } from "@heroui/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 export function EditModal({ car }) {
     if (!car) return null;
     const { _id, carName, carType, seatCapacity, pickupLocation, imageUrl, dailyRentPrice, description, availabilityStatus } = car;
+    const router = useRouter();
+    const [isPending, setIsPending] = useState(false);
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        setIsPending(true);
         const formData = new FormData(e.currentTarget);
-        const car = Object.fromEntries(formData.entries());
+        const updates = Object.fromEntries(formData.entries());
 
-        console.log(car);
+        try {
+            const { data: tokenData } = await authClient.token();
+            const res = await apiFetch(`/cars/${_id}`, {
+                method: "PATCH",
+                headers: {
+                    authorization: `Bearer ${tokenData?.token}`,
+                },
+                body: JSON.stringify(updates),
+            });
 
-
-         const { data: tokenData } = await authClient.token();
-                console.log("Token Data:", tokenData);
-        
-
-        const res= await fetch(`http://localhost:5000/cars/${_id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                authorization: `Bearer ${tokenData?.token}`
-            },
-            body: JSON.stringify(car),
-        })
-
-        const data = await res.json();
-        console.log(data);
+            if (res.ok) {
+                toast.success("Car updated successfully!");
+                router.refresh();
+            } else {
+                const err = await res.json().catch(() => ({}));
+                toast.error(err.message || "Failed to update car.");
+            }
+        } catch {
+            toast.error("Failed to update car. Please try again.");
+        } finally {
+            setIsPending(false);
+        }
     }
-
-    const isPending = false;
 
     return (
         <Modal>

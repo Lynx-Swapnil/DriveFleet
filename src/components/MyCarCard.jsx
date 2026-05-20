@@ -1,10 +1,11 @@
-import { Button } from "@heroui/react";
-import Image from "next/image";
-import Link from "next/link";
+"use client";
 
-const CarCard = ({ car }) => {
+import { EditModal } from "@/components/EditModal";
+import { DeleteAlert } from "@/components/DeleteAlert";
+import Image from "next/image";
+
+export default function MyCarCard({ car }) {
   const {
-    _id,
     carName,
     carType,
     seatCapacity,
@@ -15,12 +16,12 @@ const CarCard = ({ car }) => {
   } = car;
 
   return (
-    <article className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-4 shadow-md">
+    <article className="flex flex-col rounded-lg border border-slate-200 bg-white p-4 shadow-md">
       <Image
         src={imageUrl}
         alt={carName}
         width={400}
-        height={300}
+        height={240}
         className="h-48 w-full rounded-lg object-cover"
       />
       <h2 className="mt-4 text-xl font-semibold">{carName}</h2>
@@ -40,13 +41,10 @@ const CarCard = ({ car }) => {
       >
         {availabilityStatus}
       </span>
-      <Link href={`/explore-cars/${_id}`} className="mt-auto pt-4">
-        <Button variant="primary" className="w-full">
-          View Details
-        </Button>
-      </Link>
+      <div className="mt-4 flex flex-wrap gap-2">
+        <EditModal car={car} />
+        <DeleteAlert car={car} redirectTo="/my-added-cars" />
+      </div>
     </article>
   );
-};
-
-export default CarCard;
+}

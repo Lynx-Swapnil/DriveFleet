@@ -1,57 +1,110 @@
-import { BookingCancelAlert } from '@/components/BookingCancelAlert';
-import CarCard from '@/components/CarCard';
-import { auth } from '@/lib/auth';
-import { Button } from '@heroui/react';
-import { headerVariants } from '@heroui/styles';
-import { headers } from 'next/headers';
-import Image from 'next/image';
-import React from 'react';
+import { BookingCancelAlert } from "@/components/BookingCancelAlert";
+import { apiFetch } from "@/lib/api";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import Image from "next/image";
+import Link from "next/link";
 
-const page = async () => {
+function formatBookingDate(dateValue) {
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) {
+    return "—";
+  }
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
 
-    const session = await auth.api.getSession({
-            headers: await headers()
-        }
-    );
+export default async function MyBookingsPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-    const {token} = await auth.api.getToken({
-            headers: await headers()
-        });
-   
-    console.log('session : ', session);
+  const { token } = await auth.api.getToken({
+    headers: await headers(),
+  });
 
-    const user = session?.user;
+  const user = session?.user;
+  let bookings = [];
 
-    const res = await fetch(`http://localhost:5000/bookings/${user?.id}`,{
-        headers: {
-            authorization: `Bearer ${token}`
-        }
-    });
-    const bookings = await res.json();      
+  if (user?.id) {
+    try {
+      const res = await apiFetch(`/bookings/${user.id}`, {
+        headers: { authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        bookings = await res.json();
+      }
+    } catch {
+      bookings = [];
+    }
+  }
 
-    console.log(bookings);
+  if (!Array.isArray(bookings)) {
+    bookings = [];
+  }
 
-    return (
-        <div>
-            my bookings page
+  return (
+    <main className="mx-auto max-w-7xl px-6 py-10">
+      <h1 className="text-3xl font-bold text-slate-900">My Bookings</h1>
+      <p className="mt-2 text-slate-600">View and manage your rental bookings.</p>
 
-            <div>
-                {
-                    bookings.map(booking => (
-                       <div key={booking._id} className="border rounded-lg p-4 shadow-md">
-                           <Image src={booking.imageUrl} alt={booking.carName} width={400} height={300} className="rounded-lg" />
-                           <h2 className="text-xl font-semibold mt-4">{booking.carName}</h2>
-                            <p>Type: {booking.carType}</p>
-                            <p>Seats: {booking.seatCapacity}</p>
-                            <p>Pickup: {booking.pickupLocation}</p>
-                            <BookingCancelAlert booking={booking} />
-                       </div>
-                     )
-                    )
-                }
-            </div>
+      {bookings.length === 0 ? (
+        <p className="mt-12 text-center text-slate-500">You have no bookings yet.</p>
+      ) : (
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {bookings.map((booking) => {
+            const bookingDate =
+              booking.bookingDate || booking.createdAt || booking.date;
+            const totalPrice =
+              booking.totalPrice ?? booking.dailyRentPrice ?? "—";
+            const carId = booking.carId || booking._id;
+
+            return (
+              <article
+                key={booking._id}
+                className="rounded-lg border border-slate-200 bg-white p-4 shadow-md"
+              >
+                {booking.imageUrl && (
+                  <Image
+                    src={booking.imageUrl}
+                    alt={booking.carName}
+                    width={400}
+                    height={240}
+                    className="h-48 w-full rounded-lg object-cover"
+                  />
+                )}
+                <h2 className="mt-4 text-xl font-semibold">{booking.carName}</h2>
+                <p className="mt-2 text-slate-700">
+                  <strong>Total price:</strong> ৳{totalPrice}
+                </p>
+                <p className="mt-1 text-slate-700">
+                  <strong>Booking date:</strong>{" "}
+                  <Link
+                    href={`/explore-cars/${carId}`}
+                    className="text-cyan-600 hover:underline"
+                  >
+                    {formatBookingDate(bookingDate)}
+                  </Link>
+                </p>
+                {booking.driverNeeded !== undefined && (
+                  <p className="mt-1 text-slate-600">
+                    Driver needed: {booking.driverNeeded ? "Yes" : "No"}
+                  </p>
+                )}
+                {booking.specialNote && (
+                  <p className="mt-1 text-sm text-slate-500">
+                    Note: {booking.specialNote}
+                  </p>
+                )}
+                <BookingCancelAlert booking={booking} />
+              </article>
+            );
+          })}
         </div>
-    );
-};
-
-export default page;
+      )}
+    </main>
+  );
+}
