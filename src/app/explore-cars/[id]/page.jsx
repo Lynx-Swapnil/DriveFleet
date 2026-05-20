@@ -1,26 +1,58 @@
 import BookingCard from "@/components/BookingCard";
-import { apiFetch } from "@/lib/api";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { apiFetch } from "@/lib/api";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { notFound } from "next/navigation";
+import { FaCar, FaUsers, FaLocationDot, FaTag } from "react-icons/fa6";
+
+async function getCarDetails(id, token) {
+  try {
+    const res = await apiFetch(`/cars/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Failed to fetch car details:", error);
+    return null;
+  }
+}
 
 export default async function CarDetailsPage({ params }) {
-  const { id } = await params;
-
-  const { token } = await auth.api.getToken({
+  // Check authentication first
+  const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  const res = await apiFetch(`/cars/${id}`, {
-    headers: { authorization: `Bearer ${token}` },
-  });
-
-  if (!res.ok) {
-    notFound();
+  if (!session) {
+    redirect("/signIn");
   }
 
-  const car = await res.json();
+  const { id } = await params;
+  
+  // Get the token from headers
+  const headersList = await headers();
+  const { token } = await auth.api.getToken({
+    headers: headersList,
+  });
+
+  if (!token) {
+    redirect("/signIn");
+  }
+
+  const car = await getCarDetails(id, token);
+
+  if (!car) {
+    notFound();
+  }
   const {
     carName,
     carType,
@@ -32,45 +64,138 @@ export default async function CarDetailsPage({ params }) {
     availabilityStatus,
   } = car;
 
+  const isAvailable = availabilityStatus === "Available";
+
   return (
     <main className="mx-auto max-w-7xl px-6 py-10 transition-colors duration-300">
-      <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Car Details</h1>
-      <div className="mt-8 flex flex-col gap-10 lg:flex-row lg:items-start">
-        <section className="flex-1">
-          <Image
-            src={imageUrl}
-            alt={carName}
-            width={700}
-            height={450}
-            className="w-full rounded-xl object-cover shadow-lg dark:shadow-xl"
-          />
-          <h2 className="mt-6 text-2xl font-semibold text-slate-900 dark:text-white">{carName}</h2>
-          <p className="mt-2 text-slate-600 dark:text-slate-300 leading-relaxed">{description}</p>
-          <ul className="mt-6 space-y-3 text-slate-700 dark:text-slate-300">
-            <li className="flex items-center gap-3">
-              <span className="inline-block w-2 h-2 rounded-full bg-cyan-500"></span>
-              <span><strong>Type:</strong> {carType}</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <span className="inline-block w-2 h-2 rounded-full bg-cyan-500"></span>
-              <span><strong>Seats:</strong> {seatCapacity}</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <span className="inline-block w-2 h-2 rounded-full bg-cyan-500"></span>
-              <span><strong>Pickup:</strong> {pickupLocation}</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <span className="inline-block w-2 h-2 rounded-full bg-cyan-500"></span>
-              <span className="text-lg font-semibold text-cyan-700 dark:text-cyan-400"><strong>Daily rent:</strong> ৳{dailyRentPrice}</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
-              <span><strong>Status:</strong> {availabilityStatus}</span>
-            </li>
-          </ul>
+      {/* Header */}
+      <div className="mb-8 animate-fadeIn">
+        <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+          Car Details
+        </h1>
+        <p className="mt-2 text-slate-600 dark:text-slate-400">
+          Complete information about this premium vehicle
+        </p>
+      </div>
+
+      <div className="grid gap-8 lg:grid-cols-3">
+        {/* Left Section - Image and Details */}
+        <section className="lg:col-span-2 space-y-6">
+          {/* Image Card */}
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800 dark:shadow-xl">
+            <div className="relative h-96 w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600">
+              <Image
+                src={imageUrl}
+                alt={carName}
+                width={800}
+                height={400}
+                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                loading="eager"
+                priority
+              />
+            </div>
+
+            {/* Status Badge */}
+            <div className="absolute right-4 top-4">
+              <div
+                className={`rounded-full px-4 py-2 font-semibold text-white shadow-lg backdrop-blur-sm ${
+                  isAvailable
+                    ? "bg-green-500/90"
+                    : "bg-amber-500/90"
+                }`}
+              >
+                {availabilityStatus}
+              </div>
+            </div>
+          </div>
+
+          {/* Car Info Card */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-lg dark:border-slate-700 dark:bg-slate-800 dark:shadow-xl">
+            {/* Title and Description */}
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+              {carName}
+            </h2>
+            <p className="mt-4 leading-relaxed text-slate-600 dark:text-slate-300">
+              {description}
+            </p>
+
+            {/* Divider */}
+            <div className="my-6 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent dark:via-slate-600" />
+
+            {/* Details Grid */}
+            <div className="grid gap-6 sm:grid-cols-2">
+              {/* Type */}
+              <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50 transition-transform duration-300 hover:translate-y-1"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/40">
+                  <FaCar className="text-lg text-cyan-600 dark:text-cyan-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                    Type
+                  </p>
+                  <p className="text-lg font-semibold text-slate-900 dark:text-white">
+                    {carType}
+                  </p>
+                </div>
+              </div>
+
+              {/* Seats */}
+              <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50 transition-transform duration-300 hover:translate-y-1"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/40">
+                  <FaUsers className="text-lg text-cyan-600 dark:text-cyan-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                    Seats
+                  </p>
+                  <p className="text-lg font-semibold text-slate-900 dark:text-white">
+                    {seatCapacity} Persons
+                  </p>
+                </div>
+              </div>
+
+              {/* Pickup Location */}
+              <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50 transition-transform duration-300 hover:translate-y-1"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/40">
+                  <FaLocationDot className="text-lg text-cyan-600 dark:text-cyan-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                    Pickup Location
+                  </p>
+                  <p className="text-lg font-semibold text-slate-900 dark:text-white">
+                    {pickupLocation}
+                  </p>
+                </div>
+              </div>
+
+              {/* Daily Price */}
+              <div className="flex items-center gap-4 rounded-xl bg-gradient-to-br from-cyan-50 to-blue-50 p-4 dark:from-cyan-900/20 dark:to-blue-900/20 transition-transform duration-300 hover:translate-y-1"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/40">
+                  <FaTag className="text-lg text-cyan-600 dark:text-cyan-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                    Daily Rate
+                  </p>
+                  <p className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">
+                    ৳{dailyRentPrice}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
-        <aside className="w-full lg:max-w-md">
-          <BookingCard car={car} />
+
+        {/* Right Section - Booking Card */}
+        <aside className="lg:col-span-1">
+          <div className="sticky top-24">
+            <BookingCard car={car} />
+          </div>
         </aside>
       </div>
     </main>
