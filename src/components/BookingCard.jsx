@@ -45,6 +45,7 @@ const BookingCard = ({ car }) => {
       dailyRentPrice: car.dailyRentPrice,
       description: car.description,
       availabilityStatus: car.availabilityStatus,
+      bookingDate: new Date().toISOString(),
     };
 
     try {
