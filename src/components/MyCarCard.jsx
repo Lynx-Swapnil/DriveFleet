@@ -21,15 +21,15 @@ export default function MyCarCard({ car }) {
     <motion.article 
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden shadow-md dark:shadow-lg hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300"
+      className="flex flex-row h-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden shadow-md dark:shadow-lg hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300"
     >
-      {/* Image Section */}
-      <div className="relative overflow-hidden h-56 bg-gradient-to-br from-slate-200 to-slate-100 dark:from-slate-700 dark:to-slate-600">
+      {/* Image Section - Left Side */}
+      <div className="relative overflow-hidden w-[28rem] h-full bg-gradient-to-br from-slate-200 to-slate-100 dark:from-slate-700 dark:to-slate-600 flex-shrink-0">
         <Image
           src={imageUrl}
           alt={carName}
           width={400}
-          height={240}
+          height={300}
           className="h-full w-full object-cover hover:scale-110 transition-transform duration-500"
         />
         <div className="absolute top-3 right-3">
@@ -52,8 +52,8 @@ export default function MyCarCard({ car }) {
         </div>
       </div>
 
-      {/* Content Section */}
-      <div className="flex-1 flex flex-col p-5">
+      {/* Content Section - Right Side */}
+      <div className="flex-1 flex flex-col p-6">
         {/* Title and Type */}
         <div className="mb-4">
           <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
@@ -70,23 +70,23 @@ export default function MyCarCard({ car }) {
         </div>
 
         {/* Details Grid */}
-        <div className="space-y-3 mb-4 border-y border-slate-200 dark:border-slate-700 py-4">
+        <div className="flex gap-6 mb-4 flex-wrap">
           {/* Seats */}
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/30">
               <FaUsers className="text-sm text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">SEATING</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">SEATS</p>
               <p className="text-sm font-semibold text-slate-900 dark:text-white">
-                {seatCapacity} {seatCapacity === 1 ? "Seat" : "Seats"}
+                {seatCapacity}
               </p>
             </div>
           </div>
 
           {/* Location */}
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-orange-100 dark:bg-orange-900/30">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-orange-100 dark:bg-orange-900/30">
               <FaLocationDot className="text-sm text-orange-600 dark:text-orange-400" />
             </div>
             <div>
@@ -99,7 +99,7 @@ export default function MyCarCard({ car }) {
         </div>
 
         {/* Price Section */}
-        <div className="mb-5 p-4 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-xl border border-cyan-200 dark:border-cyan-800">
+        <div className="mb-4 p-3 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-lg border border-cyan-200 dark:border-cyan-800">
           <p className="text-xs text-slate-600 dark:text-slate-300 font-medium mb-1">
             DAILY RATE
           </p>

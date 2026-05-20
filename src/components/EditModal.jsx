@@ -47,7 +47,7 @@ export function EditModal({ car }) {
     return (
         <Modal>
             <Modal.Trigger>
-                <Button variant="outline" className="mb-4">Edit</Button>
+                <Button variant="primary" className="mb-4">Edit</Button>
             </Modal.Trigger>
             <Modal.Backdrop>
                 <Modal.Container placement="auto">

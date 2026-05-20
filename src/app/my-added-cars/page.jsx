@@ -86,7 +86,7 @@ export default function MyAddedCarsPage() {
         </motion.div>
       ) : (
         <motion.div
-          className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+          className="mt-8 grid grid-cols-1 gap-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ staggerChildren: 0.1, delayChildren: 0.2 }}
