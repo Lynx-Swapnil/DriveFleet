@@ -6,13 +6,15 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { motion } from "framer-motion";
-import { FaDoorOpen } from "react-icons/fa6";
+import { FaDoorOpen, FaBars, FaX } from "react-icons/fa6";
 
 const Navbar = () => {
   const pathname = usePathname();
   const { data: session } = authClient.useSession();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const mobileMenuRef = useRef(null);
   const user = session?.user;
 
   const isActive = (href) => {
@@ -25,12 +27,16 @@ const Navbar = () => {
   const handleLogout = async () => {
     await authClient.signOut();
     setMenuOpen(false);
+    setMobileMenuOpen(false);
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setMenuOpen(false);
+      }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+        setMobileMenuOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -42,16 +48,37 @@ const Navbar = () => {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-6 py-4 transition-colors duration-300"
+      className="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 transition-colors duration-300 relative"
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between">
-        <Link
-          href="/"
-          className="text-xl font-bold text-cyan-600 dark:text-cyan-400"
-        >
-          DriveFleet
-        </Link>
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        {/* Left Section: Hamburger + Logo */}
+        <div className="flex items-center gap-4">
+          {/* Mobile Hamburger Menu */}
+          <div className="md:hidden flex items-center">
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+              aria-label="Toggle mobile menu"
+            >
+              {mobileMenuOpen ? (
+                <FaX className="text-xl" />
+              ) : (
+                <FaBars className="text-xl" />
+              )}
+            </button>
+          </div>
 
+          {/* Logo */}
+          <Link
+            href="/"
+            className="text-xl font-bold text-cyan-600 dark:text-cyan-400 z-50"
+          >
+            DriveFleet
+          </Link>
+        </div>
+
+        {/* Desktop Navigation */}
         <ul className="hidden items-center gap-1 md:flex">
           <li>
             <Link
@@ -194,6 +221,72 @@ const Navbar = () => {
           )}
         </div>
       </div>
+
+      {/* Mobile Navigation Menu - Full Width */}
+      {mobileMenuOpen && (
+        <motion.div
+          ref={mobileMenuRef}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+          className="md:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-lg"
+        >
+          <ul className="flex flex-col gap-0 px-6 py-4 max-w-7xl mx-auto">
+            <li>
+              <Link
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  isActive("/")
+                    ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20"
+                    : "text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400"
+                }`}
+              >
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/explore-cars"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  isActive("/explore-cars")
+                    ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20"
+                    : "text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400"
+                }`}
+              >
+                Explore Cars
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/add-car"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  isActive("/add-car")
+                    ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20"
+                    : "text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400"
+                }`}
+              >
+                Add Car
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/my-bookings"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  isActive("/my-bookings")
+                    ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20"
+                    : "text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400"
+                }`}
+              >
+                My Bookings
+              </Link>
+            </li>
+          </ul>
+        </motion.div>
+      )}
     </motion.nav>
   );
 };

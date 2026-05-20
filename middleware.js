@@ -14,7 +14,7 @@ export function middleware(request) {
   const isCarDetailsPage = carDetailsPattern.test(pathname);
 
   if (isPrivateRoute || isCarDetailsPage) {
-    // Check for session cookie (better-auth uses cookies for sessions)
+    // Check for session cookie
     const sessionCookie = request.cookies.get("better-auth.session_token");
     
     // If no session cookie, redirect to login
