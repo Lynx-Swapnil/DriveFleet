@@ -9,11 +9,13 @@ import { motion } from "framer-motion";
 import SignInRequired from "@/components/SignInRequired";
 
 export default function MyAddedCarsPage() {
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending: isSessionPending } = authClient.useSession();
   const [cars, setCars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (isSessionPending) return;
+
     if (!session?.user) {
       setIsLoading(false);
       return;
@@ -21,7 +23,12 @@ export default function MyAddedCarsPage() {
 
     const fetchMyCars = async () => {
       try {
-        const res = await apiFetch("/cars/my");
+        const { data: tokenData } = await authClient.token();
+        const res = await apiFetch("/cars/my", {
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`,
+          },
+        });
         if (res.ok) {
           const data = await res.json();
           setCars(Array.isArray(data) ? data : []);
@@ -39,7 +46,7 @@ export default function MyAddedCarsPage() {
     };
 
     fetchMyCars();
-  }, [session?.user]);
+  }, [isSessionPending, session?.user]);
 
   if (!session?.user) {
     return <SignInRequired message="Please sign in to view your added cars." />;
