@@ -93,8 +93,8 @@ export default function ExploreCarsPage() {
               Filter by Type
             </label>
             <Select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
+              selectedKeys={selectedType ? [selectedType] : []}
+              onSelectionChange={(keys) => setSelectedType(Array.from(keys)[0] || "")}
               placeholder="All Types"
               className="w-full"
               aria-label="Filter by Type"
@@ -104,7 +104,7 @@ export default function ExploreCarsPage() {
               </Select.Trigger>
               <Select.Popover>
                 <ListBox>
-                  <ListBox.Item id="" textValue="All Types">
+                  <ListBox.Item key="all" id="" textValue="All Types">
                     All Types
                   </ListBox.Item>
                   {carTypes.map((type) => (
