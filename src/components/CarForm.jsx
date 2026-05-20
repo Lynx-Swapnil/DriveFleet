@@ -7,7 +7,7 @@ import { FaCar, FaLocationDot, FaTag, FaUsers, FaCamera, FaCheck, FaArrowRight }
 
 const carTypes = ["SUV", "Sedan", "Hatchback", "Luxury", "Compact", "Van", "Truck", "Coupe"];
 const locations = ["Dhaka", "Chittagong", "Sylhet", "Khulna", "Rajshahi", "Barisal"];
-const availabilityStatuses = ["Available", "Booked"];
+const availabilityStatuses = ["Available", "Not Available"];
 
 // Custom Dropdown Component
 function CustomSelect({ value, onChange, options, placeholder, label, icon: Icon, variants, itemVariants }) {

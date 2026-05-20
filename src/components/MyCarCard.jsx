@@ -52,7 +52,7 @@ export default function MyCarCard({ car }) {
                 Available
               </span>
             ) : (
-              "Booked"
+              "Not Available"
             )}
           </span>
         </div>
