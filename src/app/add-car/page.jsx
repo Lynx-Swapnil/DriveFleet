@@ -239,7 +239,7 @@ export default function AddCarPage() {
           <motion.div variants={itemVariants} className="lg:col-span-2">
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Vehicle Information Section */}
-              <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/50 p-8 shadow-sm">
+              <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-sm">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="p-2.5 rounded-lg bg-cyan-100 dark:bg-cyan-900/30">
                     <FaCar className="text-xl text-cyan-600 dark:text-cyan-400" />
@@ -443,7 +443,7 @@ export default function AddCarPage() {
             </div>
 
             {/* Why List Card */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-slate-50 to-white dark:from-slate-800/50 dark:to-slate-800 p-6">
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6">
               <h3 className="font-bold text-slate-900 dark:text-white mb-4 text-lg">
                 Why List on DriveFleet?
               </h3>
