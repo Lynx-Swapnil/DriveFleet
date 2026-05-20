@@ -4,14 +4,11 @@ import { Avatar, Button } from "@heroui/react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import { useTheme } from "@/lib/theme-context";
-import { Moon, Sun } from "@gravity-ui/icons";
 import { motion } from "framer-motion";
 import { FaDoorOpen } from "react-icons/fa6";
 
 const Navbar = () => {
   const { data: session } = authClient.useSession();
-  const { isDark, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const user = session?.user;
@@ -82,21 +79,6 @@ const Navbar = () => {
         </ul>
 
         <div className="flex items-center gap-4">
-          {/* Theme Toggle */}
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={toggleTheme}
-            className="p-2 rounded-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
-            aria-label="Toggle theme"
-          >
-            {isDark ? (
-              <Sun className="h-5 w-5 text-yellow-500" />
-            ) : (
-              <Moon className="h-5 w-5 text-slate-600" />
-            )}
-          </motion.button>
-
           {/* User Menu */}
           {user ? (
             <div ref={menuRef} className="relative flex items-center">
