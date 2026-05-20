@@ -1,7 +1,5 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
-import { apiFetch } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -37,11 +35,10 @@ export function EditModal({ car }) {
         };
 
         try {
-            const { data: tokenData } = await authClient.token();
-            const res = await apiFetch(`/cars/${_id}`, {
+            const res = await fetch(`/api/cars/${_id}`, {
                 method: "PATCH",
                 headers: {
-                    authorization: `Bearer ${tokenData?.token}`,
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(updates),
             });
@@ -49,12 +46,12 @@ export function EditModal({ car }) {
             if (res.ok) {
                 toast.success("Car updated successfully!");
                 setIsOpen(false);
-                router.refresh();
             } else {
                 const err = await res.json().catch(() => ({}));
-                toast.error(err.message || "Failed to update car.");
+                toast.error(err.error || "Failed to update car.");
             }
-        } catch {
+        } catch (error) {
+            console.error("Update error:", error);
             toast.error("Failed to update car. Please try again.");
         } finally {
             setIsPending(false);

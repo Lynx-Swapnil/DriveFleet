@@ -25,7 +25,6 @@ export function BookingCancelAlert({ booking }) {
     if (res.ok) {
       toast.success("Booking cancelled.");
       setIsOpen(false);
-      router.refresh();
     } else {
       const err = await res.json().catch(() => ({}));
       toast.error(err.message || "Failed to cancel booking.");
