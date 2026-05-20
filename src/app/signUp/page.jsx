@@ -150,12 +150,12 @@ export default function SignUpPage() {
               Create Account
             </Button>
 
-            <Button
+            {/* <Button
               type="reset"
               className="w-full rounded-lg border-2 border-slate-300 bg-white py-3 text-base font-semibold text-slate-700 transition-all duration-300 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
             >
               Clear
-            </Button>
+            </Button> */}
 
             <Button
               variant="outline"
