@@ -1,22 +1,14 @@
+"use client";
+
 import { BookingCancelAlert } from "@/components/BookingCancelAlert";
 import { apiFetch } from "@/lib/api";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
-
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FaCalendarDays, FaTag, FaUser, FaClipboard } from "react-icons/fa6";
-
-function formatBookingDate(dateValue) {
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) {
-    return "—";
-  }
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
+import { motion } from "framer-motion";
+import SignInRequired from "@/components/SignInRequired";
 
 function formatBookingDateTime(dateValue) {
   const date = new Date(dateValue);
@@ -35,55 +27,102 @@ function formatBookingDateTime(dateValue) {
   return `${dateStr} at ${timeStr}`;
 }
 
-export default async function MyBookingsPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+export default function MyBookingsPage() {
+  const { data: session, isPending: isSessionPending } = authClient.useSession();
+  const [bookings, setBookings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const { token } = await auth.api.getToken({
-    headers: await headers(),
-  });
-
-  const user = session?.user;
-  let bookings = [];
-
-  if (user?.id) {
-    try {
-      const res = await apiFetch(`/bookings/${user.id}`, {
-        headers: { authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        bookings = await res.json();
-      }
-    } catch {
-      bookings = [];
+  useEffect(() => {
+    if (isSessionPending) {
+      return;
     }
+
+    if (!session?.user?.id) {
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchBookings = async () => {
+      try {
+        const { data: tokenData } = await authClient.token();
+        const res = await apiFetch(`/bookings/${session.user.id}`, {
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`,
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setBookings(Array.isArray(data) ? data : []);
+        } else {
+          toast.error("Failed to fetch bookings");
+          setBookings([]);
+        }
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+        toast.error("Error fetching bookings");
+        setBookings([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, [isSessionPending, session?.user?.id]);
+
+  if (!session?.user) {
+    return <SignInRequired message="Please sign in to view your bookings." />;
   }
 
-  if (!Array.isArray(bookings)) {
-    bookings = [];
+  if (isLoading) {
+    return (
+      <main className="mx-auto max-w-5xl px-4 sm:px-6 py-10 transition-colors duration-300">
+        <div className="flex items-center justify-center min-h-96">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600"></div>
+        </div>
+      </main>
+    );
   }
 
   return (
     <main className="mx-auto max-w-5xl px-4 sm:px-6 py-10 transition-colors duration-300">
-      <h1 className="text-3xl font-bold text-slate-900 dark:text-white">My Bookings</h1>
-      <p className="mt-2 text-slate-600 dark:text-slate-300">View and manage your rental bookings.</p>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">My Bookings</h1>
+        <p className="mt-2 text-slate-600 dark:text-slate-300">View and manage your rental bookings.</p>
+      </motion.div>
 
       {bookings.length === 0 ? (
-        <p className="mt-12 text-center text-slate-500 dark:text-slate-400">You have no bookings yet.</p>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="mt-12 text-center"
+        >
+          <p className="text-slate-500 dark:text-slate-400 text-lg">You have no bookings yet.</p>
+        </motion.div>
       ) : (
-        <div className="mt-8 space-y-4">
+        <motion.div
+          className="mt-8 space-y-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ staggerChildren: 0.1, delayChildren: 0.2 }}
+        >
           {bookings.map((booking) => {
             const bookingDate =
               booking.bookingDate || booking.createdAt || booking.date;
             const totalPrice =
               booking.totalPrice ?? booking.dailyRentPrice ?? "—";
-            const carId = booking.carId || booking._id;
 
             return (
-              <article
+              <motion.article
                 key={booking._id}
-                className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/80 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 flex flex-col sm:flex-row"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-linear-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/80 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 flex flex-col sm:flex-row"
               >
                 {/* Cancel Button - Top Right */}
                 <div className="absolute top-4 right-4 z-10">
@@ -93,13 +132,10 @@ export default async function MyBookingsPage() {
                 {/* Image Section - Left */}
                 {booking.imageUrl && (
                   <div className="relative sm:w-64 sm:flex-shrink-0 h-48 sm:h-auto">
-                    <Image
+                    <img
                       src={booking.imageUrl}
                       alt={booking.carName}
-                      width={300}
-                      height={240}
                       className="h-48 sm:h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      loading="eager"
                     />
                   </div>
                 )}
@@ -170,13 +206,11 @@ export default async function MyBookingsPage() {
                       )}
                     </div>
                   </div>
-
-
                 </div>
-              </article>
+              </motion.article>
             );
           })}
-        </div>
+        </motion.div>
       )}
     </main>
   );

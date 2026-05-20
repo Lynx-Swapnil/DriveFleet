@@ -1,44 +1,100 @@
+"use client";
+
 import MyCarCard from "@/components/MyCarCard";
 import { apiFetch } from "@/lib/api";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { authClient } from "@/lib/auth-client";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+import SignInRequired from "@/components/SignInRequired";
 
-export default async function MyAddedCarsPage() {
-  const { token } = await auth.api.getToken({
-    headers: await headers(),
-  });
+export default function MyAddedCarsPage() {
+  const { data: session } = authClient.useSession();
+  const [cars, setCars] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  let cars = [];
-  try {
-    const res = await apiFetch("/cars/my", {
-      headers: { authorization: `Bearer ${token}` },
-    });
-    if (res.ok) {
-      cars = await res.json();
+  useEffect(() => {
+    if (!session?.user) {
+      setIsLoading(false);
+      return;
     }
-  } catch {
-    cars = [];
+
+    const fetchMyCars = async () => {
+      try {
+        const res = await apiFetch("/cars/my");
+        if (res.ok) {
+          const data = await res.json();
+          setCars(Array.isArray(data) ? data : []);
+        } else {
+          toast.error("Failed to fetch your cars");
+          setCars([]);
+        }
+      } catch (error) {
+        console.error("Error fetching cars:", error);
+        toast.error("Error fetching cars");
+        setCars([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMyCars();
+  }, [session?.user]);
+
+  if (!session?.user) {
+    return <SignInRequired message="Please sign in to view your added cars." />;
   }
 
-  if (!Array.isArray(cars)) {
-    cars = [];
+  if (isLoading) {
+    return (
+      <main className="mx-auto max-w-7xl px-6 py-10 transition-colors duration-300">
+        <div className="flex items-center justify-center min-h-96">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600"></div>
+        </div>
+      </main>
+    );
   }
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-10 transition-colors duration-300">
-      <h1 className="text-3xl font-bold text-slate-900 dark:text-white">My Added Cars</h1>
-      <p className="mt-2 text-slate-600 dark:text-slate-300">Manage your listed vehicles.</p>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">My Added Cars</h1>
+        <p className="mt-2 text-slate-600 dark:text-slate-300">Manage your listed vehicles.</p>
+      </motion.div>
 
       {cars.length === 0 ? (
-        <p className="mt-12 text-center text-slate-500 dark:text-slate-400">
-          You have not added any cars yet.
-        </p>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="mt-12 text-center"
+        >
+          <p className="text-slate-500 dark:text-slate-400 text-lg">
+            You have not added any cars yet.
+          </p>
+        </motion.div>
       ) : (
-        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+          className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ staggerChildren: 0.1, delayChildren: 0.2 }}
+        >
           {cars.map((car) => (
-            <MyCarCard key={car._id} car={car} />
+            <motion.div
+              key={car._id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <MyCarCard car={car} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
     </main>
   );

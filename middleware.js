@@ -5,9 +5,15 @@ export function middleware(request) {
 
   // Private routes that require authentication
   const privateRoutes = ["/my-bookings", "/add-car", "/my-added-cars"];
+  
+  // Car details page pattern: /explore-cars/[id]
+  const carDetailsPattern = /^\/explore-cars\/[^/]+$/;
 
-  // Check if the current path is a private route
-  if (privateRoutes.some((route) => pathname.startsWith(route))) {
+  // Check if the current path is a private route or car details page
+  const isPrivateRoute = privateRoutes.some((route) => pathname.startsWith(route));
+  const isCarDetailsPage = carDetailsPattern.test(pathname);
+
+  if (isPrivateRoute || isCarDetailsPage) {
     // Check for session cookie (better-auth uses cookies for sessions)
     const sessionCookie = request.cookies.get("better-auth.session_token");
     
@@ -21,5 +27,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/my-bookings", "/add-car", "/my-added-cars"],
+  matcher: ["/my-bookings", "/add-car", "/my-added-cars", "/explore-cars/:id"],
 };

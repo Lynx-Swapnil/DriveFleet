@@ -1,58 +1,71 @@
+"use client";
+
 import BookingCard from "@/components/BookingCard";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { apiFetch } from "@/lib/api";
 import Image from "next/image";
-import { redirect } from "next/navigation";
-import { notFound } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaCar, FaUsers, FaLocationDot, FaTag } from "react-icons/fa6";
+import { authClient } from "@/lib/auth-client";
+import SignInRequired from "@/components/SignInRequired";
 
-async function getCarDetails(id, token) {
-  try {
-    const res = await apiFetch(`/cars/${id}`, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
+export default function CarDetailsPage() {
+  const params = useParams();
+  const { data: session } = authClient.useSession();
+  const [car, setCar] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-    if (!res.ok) {
-      return null;
-    }
+  useEffect(() => {
+    if (!params?.id) return;
 
-    return await res.json();
-  } catch (error) {
-    console.error("Failed to fetch car details:", error);
-    return null;
-  }
-}
+    const fetchCarDetails = async () => {
+      try {
+        const { data: tokenData } = await authClient.token();
+        const res = await apiFetch(`/cars/${params.id}`, {
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`,
+          },
+        });
 
-export default async function CarDetailsPage({ params }) {
-  // Check authentication first
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+        if (res.ok) {
+          const data = await res.json();
+          setCar(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch car details:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  if (!session) {
-    redirect("/signIn");
-  }
+    fetchCarDetails();
+  }, [params?.id]);
 
-  const { id } = await params;
-  
-  // Get the token from headers
-  const headersList = await headers();
-  const { token } = await auth.api.getToken({
-    headers: headersList,
-  });
-
-  if (!token) {
-    redirect("/signIn");
+  if (!session?.user) {
+    return <SignInRequired message="Please sign in to view car details and make bookings." />;
   }
 
-  const car = await getCarDetails(id, token);
+  if (isLoading) {
+    return (
+      <main className="mx-auto max-w-7xl px-6 py-10 transition-colors duration-300">
+        <div className="flex items-center justify-center min-h-96">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600"></div>
+        </div>
+      </main>
+    );
+  }
 
   if (!car) {
-    notFound();
+    return (
+      <main className="mx-auto max-w-7xl px-6 py-10 transition-colors duration-300">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Car Not Found</h1>
+          <p className="mt-2 text-slate-600 dark:text-slate-300">The car you're looking for doesn't exist.</p>
+        </div>
+      </main>
+    );
   }
+
   const {
     carName,
     carType,
