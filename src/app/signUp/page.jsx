@@ -72,10 +72,7 @@ export default function SignUpPage() {
             <Label className="font-semibold text-slate-700 dark:text-slate-200">Full Name</Label>
             <Input
               placeholder="John Doe"
-              className="rounded-lg"
-              classNames={{
-                input: "bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500",
-              }}
+              className="rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
             />
             <Description className="text-xs text-slate-500 dark:text-slate-400">
               Enter your full name as it appears on your documents
@@ -97,10 +94,7 @@ export default function SignUpPage() {
             <Label className="font-semibold text-slate-700 dark:text-slate-200">Email Address</Label>
             <Input
               placeholder="john@example.com"
-              className="rounded-lg"
-              classNames={{
-                input: "bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500",
-              }}
+              className="rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
             />
             <FieldError />
           </TextField>
@@ -115,10 +109,7 @@ export default function SignUpPage() {
             <Label className="font-semibold text-slate-700 dark:text-slate-200">Password</Label>
             <Input
               placeholder="Enter your password"
-              className="rounded-lg"
-              classNames={{
-                input: "bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500",
-              }}
+              className="rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
             />
             <Description className="text-xs text-slate-500 dark:text-slate-400">
               Minimum 6 characters with uppercase and lowercase letters
@@ -131,10 +122,7 @@ export default function SignUpPage() {
             <Label className="font-semibold text-slate-700 dark:text-slate-200">Profile Photo URL</Label>
             <Input
               placeholder="https://example.com/photo.jpg"
-              className="rounded-lg"
-              classNames={{
-                input: "bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500",
-              }}
+              className="rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
             />
             <Description className="text-xs text-slate-500 dark:text-slate-400">
               Optional: Provide a link to your profile image

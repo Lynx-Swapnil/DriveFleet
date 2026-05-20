@@ -71,10 +71,7 @@ export default function SignInPage() {
             <Label className="font-semibold text-slate-700 dark:text-slate-200">Email Address</Label>
             <Input
               placeholder="john@example.com"
-              className="rounded-lg"
-              classNames={{
-                input: "bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500",
-              }}
+              className="rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
             />
             <FieldError />
           </TextField>
@@ -89,10 +86,7 @@ export default function SignInPage() {
             <Label className="font-semibold text-slate-700 dark:text-slate-200">Password</Label>
             <Input
               placeholder="Enter your password"
-              className="rounded-lg"
-              classNames={{
-                input: "bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500",
-              }}
+              className="rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
             />
             <FieldError />
           </TextField>
