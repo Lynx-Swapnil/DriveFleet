@@ -42,9 +42,9 @@ export default function AddCarPage() {
     }
 
     return (
-        <main className="mx-auto max-w-3xl px-6 py-10">
-            <h1 className="text-3xl font-bold text-slate-900">Add Car</h1>
-            <p className="mt-2 mb-6 text-slate-600">List a new vehicle for rent.</p>
+        <main className="mx-auto max-w-3xl px-6 py-10 transition-colors duration-300">
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Add Car</h1>
+            <p className="mt-2 mb-6 text-slate-600 dark:text-slate-300">List a new vehicle for rent.</p>
             <style>{`
               input[type="number"]::-webkit-outer-spin-button,
               input[type="number"]::-webkit-inner-spin-button {

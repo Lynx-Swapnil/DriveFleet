@@ -25,12 +25,12 @@ export default async function MyAddedCarsPage() {
   }
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-10">
-      <h1 className="text-3xl font-bold text-slate-900">My Added Cars</h1>
-      <p className="mt-2 text-slate-600">Manage your listed vehicles.</p>
+    <main className="mx-auto max-w-7xl px-6 py-10 transition-colors duration-300">
+      <h1 className="text-3xl font-bold text-slate-900 dark:text-white">My Added Cars</h1>
+      <p className="mt-2 text-slate-600 dark:text-slate-300">Manage your listed vehicles.</p>
 
       {cars.length === 0 ? (
-        <p className="mt-12 text-center text-slate-500">
+        <p className="mt-12 text-center text-slate-500 dark:text-slate-400">
           You have not added any cars yet.
         </p>
       ) : (

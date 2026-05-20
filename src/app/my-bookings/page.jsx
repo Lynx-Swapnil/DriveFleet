@@ -47,12 +47,12 @@ export default async function MyBookingsPage() {
   }
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-10">
-      <h1 className="text-3xl font-bold text-slate-900">My Bookings</h1>
-      <p className="mt-2 text-slate-600">View and manage your rental bookings.</p>
+    <main className="mx-auto max-w-7xl px-6 py-10 transition-colors duration-300">
+      <h1 className="text-3xl font-bold text-slate-900 dark:text-white">My Bookings</h1>
+      <p className="mt-2 text-slate-600 dark:text-slate-300">View and manage your rental bookings.</p>
 
       {bookings.length === 0 ? (
-        <p className="mt-12 text-center text-slate-500">You have no bookings yet.</p>
+        <p className="mt-12 text-center text-slate-500 dark:text-slate-400">You have no bookings yet.</p>
       ) : (
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
           {bookings.map((booking) => {
@@ -65,7 +65,7 @@ export default async function MyBookingsPage() {
             return (
               <article
                 key={booking._id}
-                className="rounded-lg border border-slate-200 bg-white p-4 shadow-md"
+                className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300"
               >
                 {booking.imageUrl && (
                   <Image
@@ -76,26 +76,26 @@ export default async function MyBookingsPage() {
                     className="h-48 w-full rounded-lg object-cover"
                   />
                 )}
-                <h2 className="mt-4 text-xl font-semibold">{booking.carName}</h2>
-                <p className="mt-2 text-slate-700">
+                <h2 className="mt-4 text-xl font-semibold text-slate-900 dark:text-white">{booking.carName}</h2>
+                <p className="mt-2 text-slate-700 dark:text-slate-300">
                   <strong>Total price:</strong> ৳{totalPrice}
                 </p>
-                <p className="mt-1 text-slate-700">
+                <p className="mt-1 text-slate-700 dark:text-slate-300">
                   <strong>Booking date:</strong>{" "}
                   <Link
                     href={`/explore-cars/${carId}`}
-                    className="text-cyan-600 hover:underline"
+                    className="text-cyan-600 dark:text-cyan-400 hover:underline"
                   >
                     {formatBookingDate(bookingDate)}
                   </Link>
                 </p>
                 {booking.driverNeeded !== undefined && (
-                  <p className="mt-1 text-slate-600">
+                  <p className="mt-1 text-slate-600 dark:text-slate-300">
                     Driver needed: {booking.driverNeeded ? "Yes" : "No"}
                   </p>
                 )}
                 {booking.specialNote && (
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                     Note: {booking.specialNote}
                   </p>
                 )}

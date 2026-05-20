@@ -73,46 +73,49 @@ const BookingCard = ({ car }) => {
   };
 
   return (
-    <div className="rounded-md bg-white p-4 shadow-sm w-full">
+    <div className="rounded-xl bg-white dark:bg-slate-800 p-6 shadow-md dark:shadow-lg border border-slate-200 dark:border-slate-700 w-full transition-colors duration-300">
       <Form onSubmit={handleBooking}>
         <Fieldset>
-          <Fieldset.Legend>Book This Car</Fieldset.Legend>
+          <Fieldset.Legend className="text-lg font-semibold text-slate-900 dark:text-white">Book This Car</Fieldset.Legend>
 
-          <div className="mb-4">
-            <Label>Driver Needed</Label>
-            <div className="mt-2 flex items-center space-x-4">
-              <label className="flex items-center space-x-2">
+          <div className="mb-6 mt-4">
+            <Label className="text-slate-900 dark:text-slate-100 font-medium">Driver Needed</Label>
+            <div className="mt-3 flex items-center space-x-6">
+              <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="radio"
                   name="driver"
                   checked={!driverNeeded}
                   onChange={() => setDriverNeeded(false)}
+                  className="w-4 h-4"
                 />
-                <span>No</span>
+                <span className="text-slate-700 dark:text-slate-300">No</span>
               </label>
-              <label className="flex items-center space-x-2">
+              <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="radio"
                   name="driver"
                   checked={driverNeeded}
                   onChange={() => setDriverNeeded(true)}
+                  className="w-4 h-4"
                 />
-                <span>Yes</span>
+                <span className="text-slate-700 dark:text-slate-300">Yes</span>
               </label>
             </div>
           </div>
 
-          <div className="mb-4">
-            <Label>Special Note</Label>
+          <div className="mb-6">
+            <Label className="text-slate-900 dark:text-slate-100 font-medium">Special Note</Label>
             <TextArea
               value={specialNote}
               onChange={(e) => setSpecialNote(e.target.value)}
               placeholder="Add any special instructions (optional)"
+              className="mt-2 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400"
             />
           </div>
 
           <Fieldset.Actions>
-            <Button type="submit" isLoading={isSubmitting} className="bg-cyan-500 text-white">
+            <Button type="submit" isLoading={isSubmitting} className="w-full bg-cyan-500 hover:bg-cyan-600 dark:bg-cyan-600 dark:hover:bg-cyan-700 text-white font-semibold py-2 transition-colors duration-300">
               Book Now
             </Button>
           </Fieldset.Actions>

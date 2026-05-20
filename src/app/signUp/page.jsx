@@ -54,9 +54,9 @@ export default function SignUpPage() {
   };
 
   return (
-    <main className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 py-12">
-      <h1 className="text-3xl font-bold text-slate-900">Registration</h1>
-      <p className="mt-2 text-slate-600">Create your DriveFleet account</p>
+    <main className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 py-12 transition-colors duration-300">
+      <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Registration</h1>
+      <p className="mt-2 text-slate-600 dark:text-slate-300">Create your DriveFleet account</p>
 
       <Form className="mt-8 flex w-full flex-col gap-4" onSubmit={onSubmit}>
         <TextField className="w-full" name="name" isRequired>
@@ -111,9 +111,9 @@ export default function SignUpPage() {
         </div>
       </Form>
 
-      <p className="mt-6 text-center text-sm text-slate-600">
+      <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-300">
         Already have an account?{" "}
-        <Link href="/signIn" className="font-medium text-cyan-600 hover:underline">
+        <Link href="/signIn" className="font-medium text-cyan-600 dark:text-cyan-400 hover:underline">
           Login here
         </Link>
       </p>

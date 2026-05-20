@@ -6,20 +6,20 @@ export default function AvailableCars({ cars = [] }) {
   const displayCars = cars.slice(0, 6);
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-16">
+    <section className="mx-auto max-w-7xl px-6 py-16 transition-colors duration-300">
       <header className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h2 className="text-3xl font-bold text-slate-900">Available Cars</h2>
-          <p className="mt-2 text-slate-600">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Available Cars</h2>
+          <p className="mt-2 text-slate-600 dark:text-slate-300">
             Browse our latest fleet — book your favorite today.
           </p>
         </div>
         <Link href="/explore-cars">
-          <Button variant="outline">View All Cars</Button>
+          <Button variant="outline" className="border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors duration-300">View All Cars</Button>
         </Link>
       </header>
       {displayCars.length === 0 ? (
-        <p className="text-center text-slate-500">No cars available right now.</p>
+        <p className="text-center text-slate-500 dark:text-slate-400">No cars available right now.</p>
       ) : (
         <ul className="grid list-none grid-cols-1 gap-6 p-0 md:grid-cols-2 lg:grid-cols-3">
           {displayCars.map((car) => (
