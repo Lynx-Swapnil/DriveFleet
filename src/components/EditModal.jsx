@@ -2,23 +2,39 @@
 
 import { authClient } from "@/lib/auth-client";
 import { apiFetch } from "@/lib/api";
-import { Envelope } from "@gravity-ui/icons";
-import { Button, FieldError, Input, Label, Modal, Surface, TextField, Select, ListBox, TextArea } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
+import { FaCar, FaXmark } from "react-icons/fa6";
+import { CarForm } from "./CarForm";
 
 export function EditModal({ car }) {
-    if (!car) return null;
-    const { _id, carName, carType, seatCapacity, pickupLocation, imageUrl, dailyRentPrice, description, availabilityStatus } = car;
     const router = useRouter();
     const [isPending, setIsPending] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const modalBodyRef = useRef(null);
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
+    if (!car) return null;
+    const { _id, carName, carType, seatCapacity, pickupLocation, imageUrl, dailyRentPrice, description } = car;
+
+    // Scroll to top when modal opens
+    useEffect(() => {
+        if (isOpen && modalBodyRef.current) {
+            modalBodyRef.current.scrollTop = 0;
+        }
+    }, [isOpen]);
+
+    const onSubmit = async (formData) => {
         setIsPending(true);
-        const formData = new FormData(e.currentTarget);
-        const updates = Object.fromEntries(formData.entries());
+        const updates = {
+            carName: formData.carName,
+            carType: formData.carType,
+            seatCapacity: parseInt(formData.seatCapacity),
+            dailyRentPrice: parseFloat(formData.dailyRentPrice),
+            pickupLocation: formData.pickupLocation,
+            imageUrl: formData.imageUrl,
+            description: formData.description || "",
+        };
 
         try {
             const { data: tokenData } = await authClient.token();
@@ -32,6 +48,7 @@ export function EditModal({ car }) {
 
             if (res.ok) {
                 toast.success("Car updated successfully!");
+                setIsOpen(false);
                 router.refresh();
             } else {
                 const err = await res.json().catch(() => ({}));
@@ -42,210 +59,68 @@ export function EditModal({ car }) {
         } finally {
             setIsPending(false);
         }
-    }
+    };
 
     return (
-        <Modal>
-            <Modal.Trigger>
-                <Button variant="primary" className="mb-4">Edit</Button>
-            </Modal.Trigger>
-            <Modal.Backdrop>
-                <Modal.Container placement="auto">
-                    <Modal.Dialog className="sm:max-w-md">
-                        <Modal.CloseTrigger />
-                        <Modal.Header>
-                            <Modal.Icon className="bg-accent-soft text-accent-soft-foreground">
-                                <Envelope className="size-5" />
-                            </Modal.Icon>
-                            <Modal.Heading>Update Car</Modal.Heading>
-                            <p className="mt-1.5 text-sm leading-5 text-muted">
-                                Fill out the form below and we will get back to you. The modal adapts automatically
-                                when the keyboard appears on mobile.
-                            </p>
-                        </Modal.Header>
-                        <Modal.Body className="p-6">
-                            <Surface variant="default">
-                                <style>{`
-                              input[type="number"]::-webkit-outer-spin-button,
-                              input[type="number"]::-webkit-inner-spin-button {
-                                -webkit-appearance: none;
-                                margin: 0;
-                              }
-                              input[type="number"] {
-                                -moz-appearance: textfield;
-                              }
-                            `}</style>
-                                <form
-                                    onSubmit={onSubmit}
-                                    className="p-10 space-y-8"
-                                >
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        {/* Car Name */}
-                                        <div className="md:col-span-2">
-                                            <TextField name="carName" isRequired defaultValue={carName}>
-                                                <Label>Car Name</Label>
-                                                <Input placeholder="Toyota RAV4" className="rounded-2xl" defaultValue={carName} />
-                                                <FieldError />
-                                            </TextField>
-                                        </div>
+        <>
+            <button
+                onClick={() => setIsOpen(true)}
+                className="w-full bg-linear-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold rounded-lg px-4 py-2.5 transition-all duration-200"
+            >
+                Edit
+            </button>
 
-                                        {/* Daily Rent Price */}
-                                        <TextField name="dailyRentPrice" type="number" isRequired defaultValue={dailyRentPrice}>
-                                            <Label>Daily Rent Price</Label>
-                                            <Input
-                                                type="number"
-                                                placeholder="79"
-                                                className="rounded-2xl"
-                                                defaultValue={dailyRentPrice}
-                                            />
-                                            <FieldError />
-                                        </TextField>
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+                    <div className="rounded-2xl bg-white dark:bg-slate-800 shadow-2xl dark:shadow-2xl max-w-2xl w-full overflow-hidden">
+                        {/* Header */}
+                        <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-5 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2.5 rounded-lg bg-cyan-100 dark:bg-cyan-900/30">
+                                    <FaCar className="text-lg text-cyan-600 dark:text-cyan-400" />
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+                                        Update Car Details
+                                    </h2>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                                        Modify your car information
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+                            >
+                                <FaXmark className="text-lg" />
+                            </button>
+                        </div>
 
-                                        {/* Car Type */}
-                                        <div>
-                                            <Select
-                                                name="carType"
-                                                isRequired
-                                                className="w-full"
-                                                placeholder="Select car type"
-                                                defaultValue={carType}
-                                            >
-                                                <Label>Car Type</Label>
-                                                <Select.Trigger className="rounded-2xl">
-                                                    <Select.Value />
-                                                    <Select.Indicator />
-                                                </Select.Trigger>
-                                                <Select.Popover>
-                                                    <ListBox>
-                                                        <ListBox.Item id="SUV" textValue="SUV">
-                                                            SUV
-                                                            <ListBox.ItemIndicator />
-                                                        </ListBox.Item>
-                                                        <ListBox.Item id="Sedan" textValue="Sedan">
-                                                            Sedan
-                                                            <ListBox.ItemIndicator />
-                                                        </ListBox.Item>
-                                                        <ListBox.Item id="Hatchback" textValue="Hatchback">
-                                                            Hatchback
-                                                            <ListBox.ItemIndicator />
-                                                        </ListBox.Item>
-                                                        <ListBox.Item id="Luxury" textValue="Luxury">
-                                                            Luxury
-                                                            <ListBox.ItemIndicator />
-                                                        </ListBox.Item>
-                                                        <ListBox.Item id="Compact" textValue="Compact">
-                                                            Compact
-                                                            <ListBox.ItemIndicator />
-                                                        </ListBox.Item>
-                                                        <ListBox.Item id="Van" textValue="Van">
-                                                            Van
-                                                            <ListBox.ItemIndicator />
-                                                        </ListBox.Item>
-                                                    </ListBox>
-                                                </Select.Popover>
-                                            </Select>
-                                        </div>
-
-                                        {/* Seat Capacity */}
-                                        <TextField name="seatCapacity" type="number" isRequired defaultValue={seatCapacity}>
-                                            <Label>Seat Capacity</Label>
-                                            <Input
-                                                type="number"
-                                                placeholder="5"
-                                                className="rounded-2xl"
-                                                defaultValue={seatCapacity}
-                                            />
-                                            <FieldError />
-                                        </TextField>
-
-                                        {/* Pickup Location */}
-                                        <TextField name="pickupLocation" isRequired defaultValue={pickupLocation}>
-                                            <Label>Pickup Location</Label>
-                                            <Input
-                                                placeholder="Dhaka, Gulshan"
-                                                className="rounded-2xl"
-                                                defaultValue={pickupLocation}
-                                            />
-                                            <FieldError />
-                                        </TextField>
-
-                                        {/* Image URL */}
-                                        <div className="md:col-span-2">
-                                            <TextField name="imageUrl" isRequired defaultValue={imageUrl}>
-                                                <Label>Image URL</Label>
-                                                <Input
-                                                    type="url"
-                                                    placeholder="https://i.ibb.co/example-car.jpg"
-                                                    className="rounded-2xl"
-                                                    defaultValue={imageUrl}
-                                                />
-                                                <FieldError />
-                                            </TextField>
-                                        </div>
-
-                                        {/* Description */}
-                                        <div className="md:col-span-2">
-                                            <TextField name="description" isRequired defaultValue={description}>
-                                                <Label>Description</Label>
-                                                <TextArea
-                                                    placeholder="Describe the car details, condition, and features..."
-                                                    className="rounded-3xl"
-                                                    defaultValue={description}
-                                                />
-                                                <FieldError />
-                                            </TextField>
-                                        </div>
-
-                                        {/* Availability Status */}
-                                        <div className="md:col-span-2">
-                                            <Select
-                                                name="availabilityStatus"
-                                                isRequired
-                                                className="w-full"
-                                                placeholder="Select availability status"
-                                                defaultValue={availabilityStatus}
-                                            >
-                                                <Label>Availability Status</Label>
-                                                <Select.Trigger className="rounded-2xl">
-                                                    <Select.Value />
-                                                    <Select.Indicator />
-                                                </Select.Trigger>
-                                                <Select.Popover>
-                                                    <ListBox>
-                                                        <ListBox.Item id="Available" textValue="Available">
-                                                            Available
-                                                            <ListBox.ItemIndicator />
-                                                        </ListBox.Item>
-                                                        <ListBox.Item id="Booked" textValue="Booked">
-                                                            Booked
-                                                            <ListBox.ItemIndicator />
-                                                        </ListBox.Item>
-                                                        <ListBox.Item id="Maintenance" textValue="Maintenance">
-                                                            Maintenance
-                                                            <ListBox.ItemIndicator />
-                                                        </ListBox.Item>
-                                                    </ListBox>
-                                                </Select.Popover>
-                                            </Select>
-                                        </div>
-                                    </div>
-
-                                    {/* Buttons */}
-
-                                    <Button
-                                        type="submit"
-                                        variant="outline"
-                                        isLoading={isPending}
-                                        className=" rounded-none w-full bg-cyan-500 text-white"
-                                    >
-                                        {isPending ? "Updating Car..." : "Update Car"}
-                                    </Button>
-                                </form>
-                            </Surface>
-                        </Modal.Body>
-                    </Modal.Dialog>
-                </Modal.Container>
-            </Modal.Backdrop>
-        </Modal>
+                        {/* Body */}
+                        <div ref={modalBodyRef} className="p-6 max-h-[80vh] overflow-y-auto">
+                            <CarForm
+                                onSubmit={onSubmit}
+                                isLoading={isPending}
+                                initialData={{
+                                    carName,
+                                    carType,
+                                    seatCapacity: seatCapacity.toString(),
+                                    dailyRentPrice: dailyRentPrice.toString(),
+                                    pickupLocation,
+                                    imageUrl,
+                                    description: description || "",
+                                }}
+                                mode="edit"
+                                showSidebar={false}
+                                formClassName="space-y-6"
+                                onCancel={() => setIsOpen(false)}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 }
+
+export default EditModal;

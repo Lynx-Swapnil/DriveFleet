@@ -102,7 +102,7 @@ export default function CarDetailsPage() {
                 alt={carName}
                 width={800}
                 height={400}
-                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                className="h-full w-full object-cover"
                 loading="eager"
                 priority
               />
@@ -138,7 +138,7 @@ export default function CarDetailsPage() {
             {/* Details Grid */}
             <div className="grid gap-6 sm:grid-cols-2">
               {/* Type */}
-              <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50 transition-transform duration-300 hover:translate-y-1"
+              <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/40">
                   <FaCar className="text-lg text-cyan-600 dark:text-cyan-400" />
@@ -154,7 +154,7 @@ export default function CarDetailsPage() {
               </div>
 
               {/* Seats */}
-              <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50 transition-transform duration-300 hover:translate-y-1"
+              <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/40">
                   <FaUsers className="text-lg text-cyan-600 dark:text-cyan-400" />
@@ -170,7 +170,7 @@ export default function CarDetailsPage() {
               </div>
 
               {/* Pickup Location */}
-              <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50 transition-transform duration-300 hover:translate-y-1"
+              <div className="flex items-center gap-4 rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/40">
                   <FaLocationDot className="text-lg text-cyan-600 dark:text-cyan-400" />
@@ -186,7 +186,7 @@ export default function CarDetailsPage() {
               </div>
 
               {/* Daily Price */}
-              <div className="flex items-center gap-4 rounded-xl bg-gradient-to-br from-cyan-50 to-blue-50 p-4 dark:from-cyan-900/20 dark:to-blue-900/20 transition-transform duration-300 hover:translate-y-1"
+              <div className="flex items-center gap-4 rounded-xl bg-gradient-to-br from-cyan-50 to-blue-50 p-4 dark:from-cyan-900/20 dark:to-blue-900/20"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/40">
                   <FaTag className="text-lg text-cyan-600 dark:text-cyan-400" />

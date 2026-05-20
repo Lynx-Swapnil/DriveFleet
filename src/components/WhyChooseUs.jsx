@@ -78,9 +78,8 @@ export default function WhyChooseUs() {
           {features.map((item) => (
             <motion.li
               key={item.title}
-              className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700 p-6 shadow-sm dark:shadow-lg hover:shadow-md dark:hover:shadow-xl transition-all duration-300"
+              className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700 p-6 shadow-sm dark:shadow-lg transition-all duration-300"
               variants={itemVariants}
-              whileHover={{ y: -5 }}
             >
               <h3 className="text-xl font-semibold text-cyan-700 dark:text-cyan-400">{item.title}</h3>
               <p className="mt-3 text-slate-600 dark:text-slate-300">{item.description}</p>

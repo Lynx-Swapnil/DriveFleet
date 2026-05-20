@@ -32,9 +32,9 @@ export function DeleteAlert({ car, redirectTo = "/explore-cars" }) {
 
   return (
     <AlertDialog>
-      <Button variant="danger" className="mb-4">
+      <button className="w-full bg-linear-to-r from-red-600 to-red-600 hover:from-red-700 hover:to-red-700 text-white font-semibold rounded-lg px-4 py-2.5 transition-all duration-200">
         Delete
-      </Button>
+      </button>
       <AlertDialog.Backdrop>
         <AlertDialog.Container>
           <AlertDialog.Dialog className="sm:max-w-100">

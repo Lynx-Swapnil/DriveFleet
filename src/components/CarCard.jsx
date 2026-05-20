@@ -20,19 +20,14 @@ const CarCard = ({ car }) => {
 
   return (
     <motion.article 
-      className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md transition-all duration-300 hover:shadow-2xl dark:border-slate-700 dark:bg-slate-800 dark:shadow-lg dark:hover:shadow-2xl"
+      className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md transition-all duration-300 dark:border-slate-700 dark:bg-slate-800 dark:shadow-lg"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.5 }}
-      whileHover={{ y: -8 }}
     >
       {/* Image Container */}
-      <motion.div
-        whileHover={{ scale: 1.08 }}
-        transition={{ duration: 0.3 }}
-        className="relative h-56 w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600"
-      >
+      <div className="relative h-56 w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600">
         <Image
           src={imageUrl}
           alt={carName}
@@ -53,7 +48,7 @@ const CarCard = ({ car }) => {
             {availabilityStatus}
           </span>
         </div>
-      </motion.div>
+      </div>
 
       {/* Content Container */}
       <div className="flex flex-col gap-4 p-6">

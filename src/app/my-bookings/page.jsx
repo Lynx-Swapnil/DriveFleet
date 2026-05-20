@@ -122,7 +122,7 @@ export default function MyBookingsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-linear-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/80 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 flex flex-col sm:flex-row"
+                className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-linear-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/80 shadow-md dark:shadow-lg transition-all duration-300 flex flex-col sm:flex-row"
               >
                 {/* Cancel Button - Top Right */}
                 <div className="absolute top-4 right-4 z-10">

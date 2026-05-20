@@ -74,7 +74,7 @@ const BookingCard = ({ car }) => {
   };
 
   return (
-    <div className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/80 p-6 shadow-lg dark:shadow-2xl border border-slate-200 dark:border-slate-700 w-full transition-all duration-300 hover:shadow-xl dark:hover:shadow-2xl">
+    <div className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/80 p-6 shadow-lg dark:shadow-2xl border border-slate-200 dark:border-slate-700 w-full transition-all duration-300">
       {/* Header */}
       <div className="mb-8 flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/40">
