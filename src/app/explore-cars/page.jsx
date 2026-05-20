@@ -83,8 +83,6 @@ export default function ExploreCarsPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full"
-              isClearable
-              onClear={() => setSearch("")}
             />
           </div>
 

@@ -12,13 +12,8 @@ const Navbar = () => {
   const { data: session } = authClient.useSession();
   const { isDark, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const menuRef = useRef(null);
   const user = session?.user;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const handleLogout = async () => {
     await authClient.signOut();
@@ -34,8 +29,6 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  if (!mounted) return null;
 
   return (
     <motion.nav
