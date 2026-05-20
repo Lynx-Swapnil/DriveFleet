@@ -7,6 +7,7 @@ import { authClient } from "@/lib/auth-client";
 import { useTheme } from "@/lib/theme-context";
 import { Moon, Sun } from "@gravity-ui/icons";
 import { motion } from "framer-motion";
+import { FaDoorOpen } from "react-icons/fa6";
 
 const Navbar = () => {
   const { data: session } = authClient.useSession();
@@ -153,8 +154,9 @@ const Navbar = () => {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="block w-full rounded-lg px-3 py-2 text-left text-red-600 hover:bg-red-50 transition-colors"
+                  className="flex items-center gap-2 w-full rounded-lg px-3 py-2 text-left text-red-600 hover:bg-red-50 transition-colors"
                 >
+                  <FaDoorOpen className="text-sm" />
                   Logout
                 </button>
               </motion.div>
