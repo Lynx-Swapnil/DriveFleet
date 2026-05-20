@@ -140,21 +140,33 @@ const Navbar = () => {
                 <Link
                   href="/add-car"
                   onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                  className={`block rounded-lg px-3 py-2 font-medium transition-all duration-200 ${
+                    isActive("/add-car")
+                      ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20 border-l-3 border-cyan-600 dark:border-cyan-400"
+                      : "text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700"
+                  }`}
                 >
                   Add Car
                 </Link>
                 <Link
                   href="/my-bookings"
                   onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                  className={`block rounded-lg px-3 py-2 font-medium transition-all duration-200 ${
+                    isActive("/my-bookings")
+                      ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20 border-l-3 border-cyan-600 dark:border-cyan-400"
+                      : "text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700"
+                  }`}
                 >
                   My Bookings
                 </Link>
                 <Link
                   href="/my-added-cars"
                   onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                  className={`block rounded-lg px-3 py-2 font-medium transition-all duration-200 ${
+                    isActive("/my-added-cars")
+                      ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20 border-l-3 border-cyan-600 dark:border-cyan-400"
+                      : "text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700"
+                  }`}
                 >
                   My Added Cars
                 </Link>
