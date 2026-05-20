@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -309,14 +310,14 @@ export function CarForm({
         {formData.imageUrl && (
           <motion.div variants={defaultItemVariants}>
             <div className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
-              <div className="relative w-full h-64 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600">
-                <img
+              <div className="relative w-full h-64 bg-linear-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600">
+                <Image
                   src={formData.imageUrl}
                   alt="Car preview"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23e2e8f0' width='100' height='100'/%3E%3Ctext x='50' y='50' text-anchor='middle' dy='.3em' fill='%2394a3b8'%3EImage not found%3C/text%3E%3C/svg%3E";
-                  }}
+                  fill
+                  unoptimized
+                  sizes="(max-width: 768px) 100vw, 768px"
+                  className="object-cover"
                 />
               </div>
             </div>
@@ -356,7 +357,7 @@ export function CarForm({
           <button
             type="submit"
             disabled={isLoading}
-            className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-700 hover:to-cyan-600 dark:from-cyan-500 dark:to-cyan-400 dark:hover:from-cyan-600 dark:hover:to-cyan-500 text-white font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="flex-1 px-6 py-3 rounded-xl bg-linear-to-r from-cyan-600 to-cyan-500 hover:from-cyan-700 hover:to-cyan-600 dark:from-cyan-500 dark:to-cyan-400 dark:hover:from-cyan-600 dark:hover:to-cyan-500 text-white font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isLoading ? (
               <>

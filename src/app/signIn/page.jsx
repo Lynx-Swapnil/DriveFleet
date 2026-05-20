@@ -95,7 +95,7 @@ export default function SignInPage() {
           <div className="flex flex-col gap-3 pt-2">
             <Button
               type="submit"
-              className="w-full rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-600 py-3 text-base font-semibold text-white shadow-md transition-all duration-300 hover:shadow-lg hover:from-cyan-600 hover:to-cyan-700"
+              className="w-full rounded-lg bg-linear-to-r from-cyan-500 to-cyan-600 py-3 text-base font-semibold text-white shadow-md transition-all duration-300 hover:shadow-lg hover:from-cyan-600 hover:to-cyan-700"
             >
               Sign In
             </Button>

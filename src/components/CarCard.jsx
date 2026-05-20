@@ -27,7 +27,7 @@ const CarCard = ({ car }) => {
       transition={{ duration: 0.5 }}
     >
       {/* Image Container */}
-      <div className="relative h-56 w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600">
+      <div className="relative h-56 w-full overflow-hidden bg-linear-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600">
         <Image
           src={imageUrl}
           alt={carName}
@@ -101,7 +101,7 @@ const CarCard = ({ car }) => {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent dark:via-slate-600" />
+        <div className="h-px bg-linear-to-r from-transparent via-slate-300 to-transparent dark:via-slate-600" />
 
         {/* Price Section */}
         <div className="flex items-baseline gap-2">
@@ -120,7 +120,7 @@ const CarCard = ({ car }) => {
             whileTap={{ scale: 0.98 }}
           >
             <Button
-              className="w-full rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-600 py-3 text-base font-semibold text-white shadow-md transition-all duration-300 hover:shadow-lg hover:from-cyan-600 hover:to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 dark:hover:from-cyan-700 dark:hover:to-cyan-800"
+              className="w-full rounded-lg bg-linear-to-r from-cyan-500 to-cyan-600 py-3 text-base font-semibold text-white shadow-md transition-all duration-300 hover:shadow-lg hover:from-cyan-600 hover:to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 dark:hover:from-cyan-700 dark:hover:to-cyan-800"
             >
               View Details
             </Button>

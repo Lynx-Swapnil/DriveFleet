@@ -27,7 +27,7 @@ export default function MyCarCard({ car }) {
       className="w-full flex flex-col sm:flex-row h-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden shadow-md dark:shadow-lg transition-all duration-300"
     >
       {/* Image Section */}
-      <div className="relative w-full sm:w-96 h-48 sm:h-auto bg-gradient-to-br from-slate-200 to-slate-100 dark:from-slate-700 dark:to-slate-600 flex-shrink-0 rounded-t-2xl sm:rounded-t-none sm:rounded-l-2xl">
+      <div className="relative w-full sm:w-96 h-48 sm:h-auto bg-linear-to-br from-slate-200 to-slate-100 dark:from-slate-700 dark:to-slate-600 shrink-0 rounded-t-2xl sm:rounded-t-none sm:rounded-l-2xl">
         
         <Image
           src={imageUrl}
@@ -117,7 +117,7 @@ export default function MyCarCard({ car }) {
         </div>
 
         {/* Price */}
-        <div className="mb-4 p-3 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-lg border border-cyan-200 dark:border-cyan-800">
+        <div className="mb-4 p-3 bg-linear-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-lg border border-cyan-200 dark:border-cyan-800">
           
           <p className="text-xs text-slate-600 dark:text-slate-300 font-medium mb-1">
             DAILY RATE

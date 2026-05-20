@@ -74,7 +74,7 @@ const BookingCard = ({ car }) => {
   };
 
   return (
-    <div className="rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/80 p-6 shadow-lg dark:shadow-2xl border border-slate-200 dark:border-slate-700 w-full transition-all duration-300">
+    <div className="rounded-2xl bg-linear-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/80 p-6 shadow-lg dark:shadow-2xl border border-slate-200 dark:border-slate-700 w-full transition-all duration-300">
       {/* Header */}
       <div className="mb-8 flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/40">
@@ -156,7 +156,7 @@ const BookingCard = ({ car }) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-xl bg-gradient-to-r from-cyan-500 to-cyan-600 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:from-cyan-600 hover:to-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed dark:from-cyan-600 dark:to-cyan-700 dark:hover:from-cyan-700 dark:hover:to-cyan-800"
+          className="w-full rounded-xl bg-linear-to-r from-cyan-500 to-cyan-600 px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:from-cyan-600 hover:to-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed dark:from-cyan-600 dark:to-cyan-700 dark:hover:from-cyan-700 dark:hover:to-cyan-800"
         >
           {isSubmitting ? (
             <div className="flex items-center justify-center gap-2">

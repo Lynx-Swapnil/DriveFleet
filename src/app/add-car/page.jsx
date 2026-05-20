@@ -80,7 +80,7 @@ export default function AddCarPage() {
         {/* Header Section */}
         <motion.div variants={itemVariants} className="mb-12">
           <div className="flex items-center gap-4 mb-6">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-100 to-cyan-50 dark:from-cyan-900/30 dark:to-cyan-800/20">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-cyan-100 to-cyan-50 dark:from-cyan-900/30 dark:to-cyan-800/20">
               <FaCar className="text-3xl text-cyan-600 dark:text-cyan-400" />
             </div>
             <div>
@@ -108,25 +108,25 @@ export default function AddCarPage() {
           {/* Sidebar - Benefits & Tips */}
           <motion.div variants={itemVariants} className="lg:col-span-1 space-y-6">
             {/* Tips Card */}
-            <div className="rounded-2xl border border-cyan-200 dark:border-cyan-800 bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 p-6">
+            <div className="rounded-2xl border border-cyan-200 dark:border-cyan-800 bg-linear-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 p-6">
               <h3 className="font-bold text-cyan-900 dark:text-cyan-200 mb-4 text-lg">
                 Listing Tips
               </h3>
               <ul className="space-y-3 text-sm text-cyan-800 dark:text-cyan-300">
                 <li className="flex items-start gap-2">
-                  <FaCheck className="text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0 text-xs" />
+                  <FaCheck className="text-cyan-600 dark:text-cyan-400 mt-0.5 shrink-0 text-xs" />
                   <span>Use clear, high-quality car images</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <FaCheck className="text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0 text-xs" />
+                  <FaCheck className="text-cyan-600 dark:text-cyan-400 mt-0.5 shrink-0 text-xs" />
                   <span>Provide accurate vehicle details</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <FaCheck className="text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0 text-xs" />
+                  <FaCheck className="text-cyan-600 dark:text-cyan-400 mt-0.5 shrink-0 text-xs" />
                   <span>Set competitive rental prices</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <FaCheck className="text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0 text-xs" />
+                  <FaCheck className="text-cyan-600 dark:text-cyan-400 mt-0.5 shrink-0 text-xs" />
                   <span>Add detailed descriptions</span>
                 </li>
               </ul>
@@ -139,19 +139,19 @@ export default function AddCarPage() {
               </h3>
               <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
                 <li className="flex items-start gap-2">
-                  <FaArrowRight className="text-cyan-600 dark:text-cyan-400 mt-1 flex-shrink-0 text-xs" />
+                  <FaArrowRight className="text-cyan-600 dark:text-cyan-400 mt-1 shrink-0 text-xs" />
                   <span>Earn passive income</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <FaArrowRight className="text-cyan-600 dark:text-cyan-400 mt-1 flex-shrink-0 text-xs" />
+                  <FaArrowRight className="text-cyan-600 dark:text-cyan-400 mt-1 shrink-0 text-xs" />
                   <span>Reach thousands of renters</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <FaArrowRight className="text-cyan-600 dark:text-cyan-400 mt-1 flex-shrink-0 text-xs" />
+                  <FaArrowRight className="text-cyan-600 dark:text-cyan-400 mt-1 shrink-0 text-xs" />
                   <span>Flexible rental terms</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <FaArrowRight className="text-cyan-600 dark:text-cyan-400 mt-1 flex-shrink-0 text-xs" />
+                  <FaArrowRight className="text-cyan-600 dark:text-cyan-400 mt-1 shrink-0 text-xs" />
                   <span>Secure & protected</span>
                 </li>
               </ul>
@@ -166,7 +166,7 @@ export default function AddCarPage() {
                 </div>
               </div>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Your listing will be reviewed and approved within 24 hours. Once approved, it'll be visible to all renters on DriveFleet.
+                Your listing will be reviewed and approved within 24 hours. Once approved, it will be visible to all renters on DriveFleet.
               </p>
             </div>
           </motion.div>

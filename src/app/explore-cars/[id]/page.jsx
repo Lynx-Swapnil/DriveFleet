@@ -60,7 +60,7 @@ export default function CarDetailsPage() {
       <main className="mx-auto max-w-7xl px-6 py-10 transition-colors duration-300">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Car Not Found</h1>
-          <p className="mt-2 text-slate-600 dark:text-slate-300">The car you're looking for doesn't exist.</p>
+          <p className="mt-2 text-slate-600 dark:text-slate-300">The car you are looking for does not exist.</p>
         </div>
       </main>
     );
@@ -96,7 +96,7 @@ export default function CarDetailsPage() {
         <section className="lg:col-span-2 space-y-6">
           {/* Image Card */}
           <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800 dark:shadow-xl">
-            <div className="relative h-96 w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600">
+            <div className="relative h-96 w-full overflow-hidden bg-linear-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600">
               <Image
                 src={imageUrl}
                 alt={carName}
@@ -133,7 +133,7 @@ export default function CarDetailsPage() {
             </p>
 
             {/* Divider */}
-            <div className="my-6 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent dark:via-slate-600" />
+            <div className="my-6 h-px bg-linear-to-r from-transparent via-slate-300 to-transparent dark:via-slate-600" />
 
             {/* Details Grid */}
             <div className="grid gap-6 sm:grid-cols-2">
@@ -186,7 +186,7 @@ export default function CarDetailsPage() {
               </div>
 
               {/* Daily Price */}
-              <div className="flex items-center gap-4 rounded-xl bg-gradient-to-br from-cyan-50 to-blue-50 p-4 dark:from-cyan-900/20 dark:to-blue-900/20"
+              <div className="flex items-center gap-4 rounded-xl bg-linear-to-br from-cyan-50 to-blue-50 p-4 dark:from-cyan-900/20 dark:to-blue-900/20"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900/40">
                   <FaTag className="text-lg text-cyan-600 dark:text-cyan-400" />

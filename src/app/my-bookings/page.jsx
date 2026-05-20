@@ -38,7 +38,8 @@ export default function MyBookingsPage() {
     }
 
     if (!session?.user?.id) {
-      setIsLoading(false);
+      // Avoid synchronous setState inside effect to prevent cascading renders
+      Promise.resolve().then(() => setIsLoading(false));
       return;
     }
 
@@ -131,11 +132,12 @@ export default function MyBookingsPage() {
 
                 {/* Image Section - Left */}
                 {booking.imageUrl && (
-                  <div className="relative sm:w-64 sm:flex-shrink-0 h-48 sm:h-auto">
-                    <img
+                  <div className="relative sm:w-64 sm:shrink-0 h-48 sm:h-auto">
+                    <Image
                       src={booking.imageUrl}
                       alt={booking.carName}
-                      className="h-48 sm:h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
                 )}
