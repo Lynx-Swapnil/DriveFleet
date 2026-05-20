@@ -108,35 +108,35 @@ const Navbar = () => {
                     : { opacity: 0, y: -10 }
                 }
                 transition={{ duration: 0.2 }}
-                className={`absolute right-0 top-full z-50 mt-3 w-48 rounded-xl border border-slate-200 bg-white p-2 shadow-lg transition-colors duration-300 ${
+                className={`absolute right-0 top-full z-50 mt-3 w-48 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2 shadow-lg transition-colors duration-300 ${
                   menuOpen ? "block" : "hidden"
                 }`}
               >
                 <Link
                   href="/add-car"
                   onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 transition-colors"
+                  className="block rounded-lg px-3 py-2 text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                 >
                   Add Car
                 </Link>
                 <Link
                   href="/my-bookings"
                   onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 transition-colors"
+                  className="block rounded-lg px-3 py-2 text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                 >
                   My Bookings
                 </Link>
                 <Link
                   href="/my-added-cars"
                   onClick={() => setMenuOpen(false)}
-                  className="block rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 transition-colors"
+                  className="block rounded-lg px-3 py-2 text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                 >
                   My Added Cars
                 </Link>
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="flex items-center gap-2 w-full rounded-lg px-3 py-2 text-left text-red-600 hover:bg-red-50 transition-colors"
+                  className="flex items-center gap-2 w-full rounded-lg px-3 py-2 text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                 >
                   <FaDoorOpen className="text-sm" />
                   Logout
