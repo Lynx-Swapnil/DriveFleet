@@ -24,17 +24,17 @@ export default function MyCarCard({ car }) {
 
   return (
     <motion.article
-      className="flex flex-row h-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden shadow-md dark:shadow-lg transition-all duration-300"
+      className="flex flex-col sm:flex-row h-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden shadow-md dark:shadow-lg transition-all duration-300"
     >
       {/* Image Section */}
-      <div className="relative w-[28rem] h-full bg-gradient-to-br from-slate-200 to-slate-100 dark:from-slate-700 dark:to-slate-600 flex-shrink-0 rounded-l-2xl">
+      <div className="relative w-full sm:w-64 h-48 sm:h-auto bg-gradient-to-br from-slate-200 to-slate-100 dark:from-slate-700 dark:to-slate-600 flex-shrink-0 rounded-t-2xl sm:rounded-t-none sm:rounded-l-2xl">
         
         <Image
           src={imageUrl}
           alt={carName}
           width={400}
           height={300}
-          className="h-full w-full object-cover rounded-l-2xl"
+          className="h-full w-full object-cover rounded-t-2xl sm:rounded-t-none sm:rounded-l-2xl"
         />
 
         {/* Availability Badge */}
@@ -59,11 +59,11 @@ export default function MyCarCard({ car }) {
       </div>
 
       {/* Content Section */}
-      <div className="flex-1 flex flex-col p-6">
+      <div className="flex-1 flex flex-col p-4 sm:p-6">
         
         {/* Title */}
         <div className="mb-4">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-2">
             {carName}
           </h2>
 
@@ -79,7 +79,7 @@ export default function MyCarCard({ car }) {
         </div>
 
         {/* Details */}
-        <div className="flex gap-6 mb-4 flex-wrap">
+        <div className="flex gap-4 mb-4 flex-wrap">
           
           {/* Seats */}
           <div className="flex items-center gap-2">
@@ -123,7 +123,7 @@ export default function MyCarCard({ car }) {
             DAILY RATE
           </p>
 
-          <p className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">
+          <p className="text-xl sm:text-2xl font-bold text-cyan-600 dark:text-cyan-400">
             ৳{dailyRentPrice}
 
             <span className="text-xs font-normal text-slate-600 dark:text-slate-400 ml-1">
