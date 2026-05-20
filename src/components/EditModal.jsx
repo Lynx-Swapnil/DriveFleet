@@ -20,7 +20,7 @@ export function EditModal({ car }) {
     }, [isOpen]);
 
     if (!car) return null;
-    const { _id, carName, carType, seatCapacity, pickupLocation, imageUrl, dailyRentPrice, description } = car;
+    const { _id, carName, carType, seatCapacity, pickupLocation, imageUrl, dailyRentPrice, availabilityStatus, description } = car;
 
     const onSubmit = async (formData) => {
         setIsPending(true);
@@ -30,6 +30,7 @@ export function EditModal({ car }) {
             seatCapacity: parseInt(formData.seatCapacity),
             dailyRentPrice: parseFloat(formData.dailyRentPrice),
             pickupLocation: formData.pickupLocation,
+            availabilityStatus: formData.availabilityStatus,
             imageUrl: formData.imageUrl,
             description: formData.description || "",
         };
@@ -104,6 +105,7 @@ export function EditModal({ car }) {
                                     seatCapacity: seatCapacity.toString(),
                                     dailyRentPrice: dailyRentPrice.toString(),
                                     pickupLocation,
+                                    availabilityStatus,
                                     imageUrl,
                                     description: description || "",
                                 }}

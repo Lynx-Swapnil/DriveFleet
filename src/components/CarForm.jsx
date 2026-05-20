@@ -7,6 +7,7 @@ import { FaCar, FaLocationDot, FaTag, FaUsers, FaCamera, FaCheck, FaArrowRight }
 
 const carTypes = ["SUV", "Sedan", "Hatchback", "Luxury", "Compact", "Van", "Truck", "Coupe"];
 const locations = ["Dhaka", "Chittagong", "Sylhet", "Khulna", "Rajshahi", "Barisal"];
+const availabilityStatuses = ["Available", "Booked"];
 
 // Custom Dropdown Component
 function CustomSelect({ value, onChange, options, placeholder, label, icon: Icon, variants, itemVariants }) {
@@ -107,6 +108,7 @@ export function CarForm({
       seatCapacity: "",
       dailyRentPrice: "",
       pickupLocation: "",
+      availabilityStatus: "",
       imageUrl: "",
       description: "",
     }
@@ -132,6 +134,7 @@ export function CarForm({
       !formData.seatCapacity ||
       !formData.dailyRentPrice ||
       !formData.pickupLocation ||
+      !formData.availabilityStatus ||
       !formData.imageUrl.trim()
     ) {
       toast.error("Please fill in all required fields");
@@ -254,6 +257,20 @@ export function CarForm({
                 itemVariants={defaultItemVariants}
               />
 
+              {/* Availability Status */}
+              <CustomSelect
+                value={formData.availabilityStatus}
+                onChange={(value) => setFormData({ ...formData, availabilityStatus: value })}
+                options={availabilityStatuses}
+                placeholder="Select status"
+                label="Availability Status"
+                icon={FaTag}
+                itemVariants={defaultItemVariants}
+              />
+            </div>
+
+            {/* Row 4 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Image URL */}
               <motion.div variants={defaultItemVariants} className="space-y-2.5">
                 <label className="block text-sm font-semibold text-slate-900 dark:text-white">
@@ -325,6 +342,7 @@ export function CarForm({
                     seatCapacity: "",
                     dailyRentPrice: "",
                     pickupLocation: "",
+                    availabilityStatus: "",
                     imageUrl: "",
                     description: "",
                   }

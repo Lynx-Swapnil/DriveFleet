@@ -2,7 +2,6 @@
 
 import CarCard from "@/components/CarCard";
 import { apiFetch } from "@/lib/api";
-import { Input, Select, ListBox, Button } from "@heroui/react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -21,21 +20,29 @@ export default function ExploreCarsPage() {
       try {
         let url = "/cars";
 
-        // Use search endpoint if search or type is provided
-        if (search.trim() || selectedType) {
-          url = "/cars/search?";
-          if (search.trim()) {
-            url += `search=${encodeURIComponent(search)}`;
-          }
-          if (selectedType) {
-            url += (search.trim() ? "&" : "") + `type=${selectedType}`;
-          }
+        // Use search endpoint if search is provided
+        if (search.trim()) {
+          url = `/cars/search?search=${encodeURIComponent(search)}`;
         }
 
         const res = await apiFetch(url);
         if (res.ok) {
-          const data = await res.json();
-          setCars(Array.isArray(data) ? data : []);
+          let data = await res.json();
+          data = Array.isArray(data) ? data : [];
+          
+          console.log("Fetched cars:", data);
+          console.log("Selected type:", selectedType);
+          
+          // Filter by type client-side
+          if (selectedType && selectedType.trim() !== "") {
+            data = data.filter((car) => {
+              console.log("Comparing:", car.carType, "===", selectedType, "=>", car.carType === selectedType);
+              return car.carType === selectedType;
+            });
+          }
+          
+          console.log("Filtered data:", data);
+          setCars(data);
         } else {
           toast.error("Failed to fetch cars");
           setCars([]);
@@ -77,13 +84,12 @@ export default function ExploreCarsPage() {
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
               Search by Car Name
             </label>
-            <Input
+            <input
               type="text"
               placeholder="e.g., Toyota, BMW..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full"
-              aria-label="Search by Car Name"
+              className="w-full h-11 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-400 dark:focus:border-cyan-500 focus:ring-2 focus:ring-cyan-400/20 dark:focus:ring-cyan-500/20 transition-all"
             />
           </div>
 
@@ -92,40 +98,28 @@ export default function ExploreCarsPage() {
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
               Filter by Type
             </label>
-            <Select
-              selectedKeys={selectedType ? [selectedType] : []}
-              onSelectionChange={(keys) => setSelectedType(Array.from(keys)[0] || "")}
-              placeholder="All Types"
-              className="w-full"
-              aria-label="Filter by Type"
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="w-full h-11 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-cyan-400 dark:focus:border-cyan-500 focus:ring-2 focus:ring-cyan-400/20 dark:focus:ring-cyan-500/20 transition-all cursor-pointer"
             >
-              <Select.Trigger>
-                <Select.Value />
-              </Select.Trigger>
-              <Select.Popover>
-                <ListBox>
-                  <ListBox.Item key="all" id="" textValue="All Types">
-                    All Types
-                  </ListBox.Item>
-                  {carTypes.map((type) => (
-                    <ListBox.Item key={type} id={type} textValue={type}>
-                      {type}
-                    </ListBox.Item>
-                  ))}
-                </ListBox>
-              </Select.Popover>
-            </Select>
+              <option value="">All Types</option>
+              {carTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Reset Button */}
           <div className="flex gap-2">
-            <Button
+            <button
               onClick={handleReset}
-              variant="outline"
-              className="w-full border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors duration-300"
+              className="w-full h-11 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-medium hover:bg-slate-100 dark:hover:bg-slate-600 focus:outline-none focus:border-cyan-400 dark:focus:border-cyan-500 focus:ring-2 focus:ring-cyan-400/20 dark:focus:ring-cyan-500/20 transition-all"
             >
               Reset
-            </Button>
+            </button>
           </div>
         </div>
       </div>

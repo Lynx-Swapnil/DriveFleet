@@ -24,10 +24,10 @@ export default function MyCarCard({ car }) {
 
   return (
     <motion.article
-      className="flex flex-col sm:flex-row h-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden shadow-md dark:shadow-lg transition-all duration-300"
+      className="w-full flex flex-col sm:flex-row h-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden shadow-md dark:shadow-lg transition-all duration-300"
     >
       {/* Image Section */}
-      <div className="relative w-full sm:w-64 h-48 sm:h-auto bg-gradient-to-br from-slate-200 to-slate-100 dark:from-slate-700 dark:to-slate-600 flex-shrink-0 rounded-t-2xl sm:rounded-t-none sm:rounded-l-2xl">
+      <div className="relative w-full sm:w-96 h-48 sm:h-auto bg-gradient-to-br from-slate-200 to-slate-100 dark:from-slate-700 dark:to-slate-600 flex-shrink-0 rounded-t-2xl sm:rounded-t-none sm:rounded-l-2xl">
         
         <Image
           src={imageUrl}
@@ -52,7 +52,7 @@ export default function MyCarCard({ car }) {
                 Available
               </span>
             ) : (
-              "Not Available"
+              "Booked"
             )}
           </span>
         </div>
