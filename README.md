@@ -2,7 +2,7 @@
 
 A modern, full-stack car rental platform built with **Next.js 16**, **React 19**, **MongoDB**, and **Better Auth**.
 
-🌐 **Live Site:** *[Update after deployment]*
+🌐 **Live Site:** [https://drive-fleet-seven.vercel.app/](https://drive-fleet-seven.vercel.app/)
 
 ---
 
