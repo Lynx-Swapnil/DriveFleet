@@ -45,12 +45,7 @@ export default function MyBookingsPage() {
 
     const fetchBookings = async () => {
       try {
-        const { data: tokenData } = await authClient.token();
-        const res = await apiFetch(`/bookings/${session.user.id}`, {
-          headers: {
-            authorization: `Bearer ${tokenData?.token}`,
-          },
-        });
+        const res = await apiFetch(`/bookings/${session.user.id}`);
         if (res.ok) {
           const data = await res.json();
           setBookings(Array.isArray(data) ? data : []);

@@ -1,18 +1,23 @@
+import { auth } from "@/lib/auth";
+
 export async function GET(request, { params }) {
-  const { id } = params;
-  const authHeader = request.headers.get("authorization");
+  const { id } = await params;
   const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
 
-  if (!authHeader) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
+    const { token } = await auth.api.getToken({
+      headers: request.headers,
+    });
+
+    if (!token) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const res = await fetch(`${backendUrl}/bookings/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: authHeader,
+        authorization: `Bearer ${token}`,
       },
       cache: "no-store",
     });
@@ -36,20 +41,23 @@ export async function GET(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const { id } = params;
-  const authHeader = request.headers.get("authorization");
+  const { id } = await params;
   const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
 
-  if (!authHeader) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
+    const { token } = await auth.api.getToken({
+      headers: request.headers,
+    });
+
+    if (!token) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const res = await fetch(`${backendUrl}/bookings/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        authorization: authHeader,
+        authorization: `Bearer ${token}`,
       },
     });
 

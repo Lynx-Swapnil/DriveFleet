@@ -5,14 +5,21 @@ import { revalidatePath } from "next/cache";
 export async function GET(request, { params }) {
   try {
     const { id } = await params;
-    const authHeader = request.headers.get("authorization");
     const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
+
+    const { token } = await auth.api.getToken({
+      headers: request.headers,
+    });
+
+    if (!token) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
     const res = await fetch(`${backendUrl}/cars/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        ...(authHeader && { authorization: authHeader }),
+        authorization: `Bearer ${token}`,
       },
       cache: "no-store",
     });

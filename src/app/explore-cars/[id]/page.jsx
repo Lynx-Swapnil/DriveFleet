@@ -26,12 +26,7 @@ export default function CarDetailsPage() {
 
     const fetchCarDetails = async () => {
       try {
-        const { data: tokenData } = await authClient.token();
-        const res = await apiFetch(`/cars/${params.id}`, {
-          headers: {
-            authorization: `Bearer ${tokenData?.token}`,
-          },
-        });
+        const res = await apiFetch(`/cars/${params.id}`);
 
         if (res.ok) {
           const data = await res.json();

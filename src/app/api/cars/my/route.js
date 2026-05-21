@@ -1,17 +1,22 @@
+import { auth } from "@/lib/auth";
+
 export async function GET(request) {
-  const authHeader = request.headers.get("authorization");
   const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
 
-  if (!authHeader) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
+    const { token } = await auth.api.getToken({
+      headers: request.headers,
+    });
+
+    if (!token) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const res = await fetch(`${backendUrl}/cars/my`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: authHeader,
+        authorization: `Bearer ${token}`,
       },
       cache: "no-store",
     });

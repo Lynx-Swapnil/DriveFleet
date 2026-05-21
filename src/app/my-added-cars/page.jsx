@@ -23,12 +23,7 @@ export default function MyAddedCarsPage() {
 
     const fetchMyCars = async () => {
       try {
-        const { data: tokenData } = await authClient.token();
-        const res = await apiFetch("/cars/my", {
-          headers: {
-            authorization: `Bearer ${tokenData?.token}`,
-          },
-        });
+        const res = await apiFetch("/cars/my");
         if (res.ok) {
           const data = await res.json();
           setCars(Array.isArray(data) ? data : []);
