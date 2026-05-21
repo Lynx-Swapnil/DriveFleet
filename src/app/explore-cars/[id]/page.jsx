@@ -11,12 +11,18 @@ import SignInRequired from "@/components/SignInRequired";
 
 export default function CarDetailsPage() {
   const params = useParams();
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending: isSessionPending } = authClient.useSession();
   const [car, setCar] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!params?.id) return;
+    if (isSessionPending) return;
+
+    if (!session?.user) {
+      setIsLoading(false);
+      return;
+    }
 
     const fetchCarDetails = async () => {
       try {
@@ -39,7 +45,7 @@ export default function CarDetailsPage() {
     };
 
     fetchCarDetails();
-  }, [params?.id]);
+  }, [params?.id, isSessionPending, session?.user?.id]);
 
   if (!session?.user) {
     return <SignInRequired message="Please sign in to view car details and make bookings." />;
