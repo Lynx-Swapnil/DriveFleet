@@ -1,15 +1,13 @@
-import { auth } from "@/lib/auth";
+import { getAuthHeaders } from "@/lib/proxy-auth";
+
+const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
 
 export async function GET(request, { params }) {
-  const { id } = await params;
-  const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
-
   try {
-    const { token } = await auth.api.getToken({
-      headers: request.headers,
-    });
+    const { id } = await params;
+    const auth = await getAuthHeaders(request.headers);
 
-    if (!token) {
+    if (!auth) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -17,39 +15,29 @@ export async function GET(request, { params }) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
+        ...auth.internalHeaders,
       },
       cache: "no-store",
     });
 
     if (!res.ok) {
-      return Response.json(
-        { error: "Failed to fetch bookings" },
-        { status: res.status }
-      );
+      return Response.json({ error: "Failed to fetch bookings" }, { status: res.status });
     }
 
     const data = await res.json();
     return Response.json(data);
   } catch (error) {
     console.error("Error fetching bookings:", error);
-    return Response.json(
-      { error: "Failed to fetch bookings" },
-      { status: 500 }
-    );
+    return Response.json({ error: "Failed to fetch bookings" }, { status: 500 });
   }
 }
 
 export async function DELETE(request, { params }) {
-  const { id } = await params;
-  const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
-
   try {
-    const { token } = await auth.api.getToken({
-      headers: request.headers,
-    });
+    const { id } = await params;
+    const auth = await getAuthHeaders(request.headers);
 
-    if (!token) {
+    if (!auth) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -57,7 +45,7 @@ export async function DELETE(request, { params }) {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
+        ...auth.internalHeaders,
       },
     });
 
@@ -70,9 +58,6 @@ export async function DELETE(request, { params }) {
     return Response.json(data);
   } catch (error) {
     console.error("Error deleting booking:", error);
-    return Response.json(
-      { error: "Failed to delete booking" },
-      { status: 500 }
-    );
+    return Response.json({ error: "Failed to delete booking" }, { status: 500 });
   }
 }

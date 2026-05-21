@@ -1,8 +1,8 @@
-import { auth } from "@/lib/auth";
+import { getAuthHeaders } from "@/lib/proxy-auth";
+
+const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
 
 export async function GET(request) {
-  const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
-
   try {
     const res = await fetch(`${backendUrl}/cars`, {
       method: "GET",
@@ -10,44 +10,32 @@ export async function GET(request) {
     });
 
     if (!res.ok) {
-      return Response.json(
-        { error: "Failed to fetch cars" },
-        { status: res.status }
-      );
+      return Response.json({ error: "Failed to fetch cars" }, { status: res.status });
     }
 
     const data = await res.json();
     return Response.json(data);
   } catch (error) {
     console.error("Error fetching cars:", error);
-    return Response.json(
-      { error: "Failed to fetch cars" },
-      { status: 500 }
-    );
+    return Response.json({ error: "Failed to fetch cars" }, { status: 500 });
   }
 }
 
 export async function POST(request) {
   try {
-    const { token } = await auth.api.getToken({
-      headers: request.headers,
-    });
+    const auth = await getAuthHeaders(request.headers);
 
-    if (!token) {
-      return Response.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+    if (!auth) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
-    const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
 
     const res = await fetch(`${backendUrl}/cars`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
+        ...auth.internalHeaders,
       },
       body: JSON.stringify(body),
     });
@@ -61,9 +49,6 @@ export async function POST(request) {
     return Response.json(data);
   } catch (error) {
     console.error("Error adding car:", error);
-    return Response.json(
-      { error: "Failed to add car" },
-      { status: 500 }
-    );
+    return Response.json({ error: "Failed to add car" }, { status: 500 });
   }
 }

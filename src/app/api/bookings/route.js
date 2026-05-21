@@ -1,26 +1,22 @@
-import { auth } from "@/lib/auth";
+import { getAuthHeaders } from "@/lib/proxy-auth";
+
+const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
 
 export async function POST(request) {
   try {
-    const { token } = await auth.api.getToken({
-      headers: request.headers,
-    });
+    const auth = await getAuthHeaders(request.headers);
 
-    if (!token) {
-      return Response.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+    if (!auth) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
-    const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
 
     const res = await fetch(`${backendUrl}/bookings`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
+        ...auth.internalHeaders,
       },
       body: JSON.stringify(body),
     });
@@ -34,9 +30,6 @@ export async function POST(request) {
     return Response.json(data);
   } catch (error) {
     console.error("Error creating booking:", error);
-    return Response.json(
-      { error: "Failed to create booking" },
-      { status: 500 }
-    );
+    return Response.json({ error: "Failed to create booking" }, { status: 500 });
   }
 }
