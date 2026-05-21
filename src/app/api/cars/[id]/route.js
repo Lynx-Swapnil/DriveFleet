@@ -2,6 +2,39 @@ import { apiFetch } from "@/lib/api";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
+export async function GET(request, { params }) {
+  try {
+    const { id } = await params;
+    const authHeader = request.headers.get("authorization");
+    const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
+
+    const res = await fetch(`${backendUrl}/cars/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(authHeader && { authorization: authHeader }),
+      },
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      return Response.json(
+        { error: "Failed to fetch car details" },
+        { status: res.status }
+      );
+    }
+
+    const data = await res.json();
+    return Response.json(data);
+  } catch (error) {
+    console.error("Error fetching car details:", error);
+    return Response.json(
+      { error: "Failed to fetch car details" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function DELETE(request, { params }) {
   try {
     const { id } = await params;

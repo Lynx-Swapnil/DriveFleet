@@ -1,0 +1,42 @@
+import { auth } from "@/lib/auth";
+
+export async function POST(request) {
+  try {
+    const { token } = await auth.api.getToken({
+      headers: request.headers,
+    });
+
+    if (!token) {
+      return Response.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    const backendUrl = process.env.BACKEND_API_URL || "http://localhost:5000";
+
+    const res = await fetch(`${backendUrl}/bookings`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({ error: "Failed to create booking" }));
+      return Response.json(error, { status: res.status });
+    }
+
+    const data = await res.json();
+    return Response.json(data);
+  } catch (error) {
+    console.error("Error creating booking:", error);
+    return Response.json(
+      { error: "Failed to create booking" },
+      { status: 500 }
+    );
+  }
+}
