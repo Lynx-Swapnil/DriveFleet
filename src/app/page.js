@@ -14,18 +14,10 @@ export default async function Home() {
   } catch {
     cars = [];
   }
-
-  const featuredRes = await apiFetch("/featured");
-  let featuredCars = [];
-  if (featuredRes.ok) {
-    featuredCars = await featuredRes.json();
-  }
-
-
   return (
     <>
       <Hero />
-      <AvailableCars cars={featuredCars} />
+      <AvailableCars cars={cars} />
       <WhyChooseUs />
       <HowItWorks />
     </>
