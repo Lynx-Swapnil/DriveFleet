@@ -28,6 +28,7 @@ export default function AddCarPage() {
         seatCapacity: parseInt(formData.seatCapacity),
         dailyRentPrice: parseFloat(formData.dailyRentPrice),
         pickupLocation: formData.pickupLocation,
+        availabilityStatus: formData.availabilityStatus,
         imageUrl: formData.imageUrl,
         description: formData.description || "",
       };

@@ -45,7 +45,7 @@ const CarCard = ({ car }) => {
                 : "bg-amber-500/90 text-white dark:bg-amber-600/90"
             }`}
           >
-            {availabilityStatus}
+            {availabilityStatus === "Available" ? "Available" : "Not Available"}
           </span>
         </div>
       </div>
