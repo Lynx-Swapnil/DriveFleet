@@ -27,5 +27,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/my-bookings", "/add-car", "/my-added-cars", "/explore-cars/:id"],
+  matcher: ["/my-bookings", "/add-car", "/my-added-cars", "/explore-cars/:path*"],
 };
