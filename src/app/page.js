@@ -15,10 +15,17 @@ export default async function Home() {
     cars = [];
   }
 
+  const featuredRes = await apiFetch("/featured");
+  let featuredCars = [];
+  if (featuredRes.ok) {
+    featuredCars = await featuredRes.json();
+  }
+
+
   return (
     <>
       <Hero />
-      <AvailableCars cars={cars} />
+      <AvailableCars cars={featuredCars} />
       <WhyChooseUs />
       <HowItWorks />
     </>
